@@ -499,9 +499,11 @@ function ResultsView({ input, setInput, isLoading, handleSubmit, lastMsg, filter
   return (
     <div className="flex-1 flex flex-col">
       <header className="shrink-0 border-b border-gray-200 bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center gap-6">
-          <span className="text-2xl font-bold text-black tracking-tight shrink-0">Sel<span className="text-primary">ec</span>to</span>
-          <div className="flex-1 flex items-center gap-2 flex-wrap">
+        <div className="max-w-7xl mx-auto px-6 pt-3 pb-1">
+          <span className="text-2xl font-bold text-black tracking-tight">Sel<span className="text-primary">ec</span>to</span>
+          <span className="text-xs text-gray-400 ml-3">{filtered.length} {"үр дүн"}</span>
+        </div>
+        <div className="max-w-7xl mx-auto px-6 pb-3 flex items-center gap-2 flex-wrap">
             <FDrop label="Ангилал" onChange={(v) => updateFilter({ category: v as Category })}>
               {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
             </FDrop>
@@ -530,8 +532,6 @@ function ResultsView({ input, setInput, isLoading, handleSubmit, lastMsg, filter
                 {allBrands.map(b => <option key={b} value={b}>{b}</option>)}
               </FDrop>
             )}
-          </div>
-          <span className="text-xs text-gray-400 shrink-0">{filtered.length} үр дүн</span>
         </div>
       </header>
       <div className="flex-1 overflow-y-auto">
