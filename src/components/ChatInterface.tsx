@@ -313,7 +313,7 @@ function CartView({ items, totalPrice, onRemove, onUpdateQty }: {
   items: CartItem[]; totalPrice: number;
   onRemove: (id: string) => void; onUpdateQty: (id: string, qty: number) => void;
 }) {
-  if (items.length === 0) return <PlaceholderPage title="\u0421\u0430\u0433\u0441 \u0445\u043E\u043E\u0441\u043E\u043D" desc="\u0411\u0430\u0440\u0430\u0430 \u0445\u0430\u0439\u0436 \u0441\u0430\u0433\u0441\u043B\u0430\u0430\u0440\u0430\u0439." />;
+  if (items.length === 0) return <PlaceholderPage title="Сагс хоосон байна" desc="Бараа хайж сагслаарай." />;
 
   const DELIVERY: Record<string, { label: string; time: string; color: string }> = {
     cody: { label: "Cody \u043C\u044D\u0440\u0447\u0430\u043D\u0442", time: "48 \u0446\u0430\u0433\u0438\u0439\u043D \u0434\u043E\u0442\u043E\u0440", color: "text-purple-600 bg-purple-50" },
