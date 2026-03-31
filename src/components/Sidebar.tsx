@@ -27,8 +27,12 @@ export default function Sidebar({ active, onNavigate, cartCount = 0 }: Props) {
       </button>
       {NAV_ITEMS.map((item) => (
         <button key={item.id} onClick={() => onNavigate(item.id)} title={item.label}
-          className={`relative w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-            active === item.id ? "bg-white/15 text-white" : "text-white/40 hover:text-white/70 hover:bg-white/10"
+          className={`relative rounded-xl flex items-center justify-center transition-all ${
+            item.id === "cart" && cartCount > 0
+              ? "w-12 h-12 bg-primary text-white shadow-lg shadow-primary/30 scale-110"
+              : active === item.id
+                ? "w-10 h-10 bg-white/15 text-white"
+                : "w-10 h-10 text-white/40 hover:text-white/70 hover:bg-white/10"
           }`}>
           {item.icon}
           {item.id === "cart" && cartCount > 0 && (
