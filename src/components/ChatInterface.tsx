@@ -127,7 +127,7 @@ export default function ChatInterface() {
             </div>
           </div>
         )}
-        {activePage !== "home" && (
+        {activePage !== "home" && activePage !== "cart" && (
           <div className="shrink-0 z-10 flex justify-center pb-5 pt-3">
             <form onSubmit={handleSubmit} className="w-full max-w-xl mx-6">
               <div className="relative">
@@ -310,10 +310,10 @@ function CartView({ items, totalPrice, onRemove, onUpdateQty }: {
   if (items.length === 0) return <PlaceholderPage title="Сагс хоосон байна" desc="Бараа хайж сагслаарай." />;
 
   const DELIVERY: Record<string, { label: string; time: string; color: string }> = {
-    cody: { label: "Cody \u043C\u044D\u0440\u0447\u0430\u043D\u0442", time: "48 \u0446\u0430\u0433\u0438\u0439\u043D \u0434\u043E\u0442\u043E\u0440", color: "text-purple-600 bg-purple-50" },
-    zary: { label: "Zary.mn", time: "48 \u0446\u0430\u0433\u0438\u0439\u043D \u0434\u043E\u0442\u043E\u0440", color: "text-pink-600 bg-pink-50" },
-    shoppy: { label: "Shoppy.mn", time: "1-3 \u04E9\u0434\u04E9\u0440", color: "text-emerald-600 bg-emerald-50" },
-    shoppyhub: { label: "ShoppyHub.mn", time: "7-14 \u04E9\u0434\u04E9\u0440", color: "text-blue-600 bg-blue-50" },
+    cody: { label: "Cody мэрчант", time: "48 цагийн дотор", color: "text-purple-600 bg-purple-50" },
+    zary: { label: "Zary.mn", time: "48 цагийн дотор", color: "text-pink-600 bg-pink-50" },
+    shoppy: { label: "Shoppy.mn", time: "1-3 өдөр", color: "text-emerald-600 bg-emerald-50" },
+    shoppyhub: { label: "ShoppyHub.mn", time: "7-14 өдөр", color: "text-blue-600 bg-blue-50" },
   };
 
   const grouped = new Map<string, CartItem[]>();
@@ -323,13 +323,13 @@ function CartView({ items, totalPrice, onRemove, onUpdateQty }: {
     grouped.get(key)!.push(item);
   });
 
-  const fmt = (n: number) => n.toLocaleString("mn-MN") + "\u20AE";
+  const fmt = (n: number) => n.toLocaleString("mn-MN") + "₮";
 
   return (
     <div className="flex-1 flex flex-col">
       <header className="shrink-0 border-b border-gray-200 bg-white px-6 py-4">
-        <h2 className="text-xl font-bold text-black">\u041C\u0438\u043D\u0438\u0439 \u0441\u0430\u0433\u0441</h2>
-        <p className="text-xs text-gray-400 mt-1">{items.reduce((s, i) => s + i.quantity, 0)} \u0431\u0430\u0440\u0430\u0430 \u00B7 {grouped.size} \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C</p>
+        <h2 className="text-xl font-bold text-black">Миний сагс</h2>
+        <p className="text-xs text-gray-400 mt-1">{items.reduce((s, i) => s + i.quantity, 0)} бараа · {grouped.size} платформ</p>
       </header>
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-3xl mx-auto px-6 py-4 space-y-6">
@@ -341,7 +341,7 @@ function CartView({ items, totalPrice, onRemove, onUpdateQty }: {
                 <div className="px-4 py-3 border-b border-gray-50 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${d.color}`}>{d.label}</span>
-                    {d.time && <span className="text-[11px] text-gray-400">\u0425\u04AF\u0440\u0433\u044D\u043B\u0442: {d.time}</span>}
+                    {d.time && <span className="text-[11px] text-gray-400">{"Хүргэлт"}: {d.time}</span>}
                   </div>
                   <span className="text-sm font-semibold text-black">{fmt(subtotal)}</span>
                 </div>
@@ -378,10 +378,10 @@ function CartView({ items, totalPrice, onRemove, onUpdateQty }: {
       <footer className="shrink-0 border-t border-gray-200 bg-white px-6 py-4">
         <div className="max-w-3xl mx-auto">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-gray-400">\u041D\u0438\u0439\u0442 \u0434\u04AF\u043D</span>
+            <span className="text-sm text-gray-400">{"Нийт дүн"}</span>
             <span className="text-2xl font-bold text-black">{fmt(totalPrice)}</span>
           </div>
-          <button className="w-full py-3.5 bg-primary hover:bg-primary-light text-white font-medium rounded-xl transition-colors">\u0417\u0430\u0445\u0438\u0430\u043B\u0430\u0445</button>
+          <button className="w-full py-3.5 bg-primary hover:bg-primary-light text-white font-medium rounded-xl transition-colors">{"Төлбөр төлөх"}</button>
         </div>
       </footer>
     </div>
