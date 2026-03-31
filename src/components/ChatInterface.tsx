@@ -133,7 +133,7 @@ export default function ChatInterface() {
               <div className="relative">
                 <input type="text" value={input} onChange={(e) => setInput(e.target.value)}
                   placeholder="Та юу хайж байгаа вэ? Энд бичээрэй."
-                  className="w-full bg-white border border-gray-200 rounded-full px-6 py-4 pr-14 text-sm text-black placeholder:text-gray-400 focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 shadow-xl shadow-gray-300/30 transition-all"
+                  className="w-full bg-white/70 backdrop-blur-md border border-gray-200/60 rounded-full px-6 py-4 pr-14 text-sm text-black placeholder:text-gray-400 focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 shadow-xl shadow-gray-300/20 transition-all"
                   disabled={isLoading} />
                 <button type="submit" disabled={isLoading || !input.trim()}
                   className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-primary hover:bg-primary-light disabled:opacity-30 text-white flex items-center justify-center transition-colors">
