@@ -2,7 +2,7 @@
 
 export default function SiteFooter() {
   return (
-    <footer className="bg-white border-t border-gray-100 text-gray-500 text-xs">
+    <footer className="mt-12 bg-white border-t border-gray-100 text-gray-500 text-xs">
       <div className="max-w-6xl mx-auto px-6 py-8">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-8">
           <div>
