@@ -238,15 +238,12 @@ function BrandsView({ searchFor }: { searchFor: (q: string) => void }) {
   return (
     <div className="flex flex-col">
       <div className="max-w-6xl mx-auto px-6 py-6 space-y-10 w-full">
-        {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-black">\u0411\u0440\u044D\u043D\u0434 & \u0414\u044D\u043B\u0433\u04AF\u04AF\u0440\u04AF\u04AF\u0434</h1>
-          <p className="text-sm text-gray-400 mt-1">\u0411\u04AF\u0445 \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u044B\u043D \u0431\u0440\u044D\u043D\u0434, \u0434\u044D\u043B\u0433\u04AF\u04AF\u0440\u04AF\u04AF\u0434\u0438\u0439\u043D \u0436\u0430\u0433\u0441\u0430\u0430\u043B\u0442</p>
+          <h1 className="text-2xl font-bold text-black">Брэнд & Дэлгүүрүүд</h1>
+          <p className="text-sm text-gray-400 mt-1">Бүх платформын брэнд, дэлгүүрүүдийн жагсаалт</p>
         </div>
-
-        {/* Brands by category */}
         <section>
-          <h2 className="text-lg font-bold text-black mb-4">\u0411\u0440\u044D\u043D\u0434\u04AF\u04AF\u0434</h2>
+          <h2 className="text-lg font-bold text-black mb-4">Брэндүүд</h2>
           <div className="space-y-6">
             {Array.from(brandsByCategory.entries()).map(([category, brands]) => (
               <div key={category}>
@@ -263,10 +260,8 @@ function BrandsView({ searchFor }: { searchFor: (q: string) => void }) {
             ))}
           </div>
         </section>
-
-        {/* Stores */}
         <section>
-          <h2 className="text-lg font-bold text-black mb-4">\u0414\u044D\u043B\u0433\u04AF\u04AF\u0440\u04AF\u04AF\u0434</h2>
+          <h2 className="text-lg font-bold text-black mb-4">Дэлгүүрүүд</h2>
           <div className="space-y-6">
             {Array.from(storesByPlatform.entries()).map(([platform, stores]) => (
               <div key={platform}>
@@ -291,7 +286,6 @@ function BrandsView({ searchFor }: { searchFor: (q: string) => void }) {
             ))}
           </div>
         </section>
-
         <SiteFooter />
       </div>
     </div>
