@@ -26,9 +26,9 @@ const FC = [
 ];
 
 const BROWSE_COLLECTIONS = [
-  { title: "Гэрийн тав тухтай бараа", desc: "HomeStyle, IKEA, Philips", bg: "from-amber-700 to-amber-900", img: "https://placehold.co/600x200/78350f/white?text=Home" },
-  { title: "Загварлаг хувцас", desc: "Zara, H&M, Nike, Adidas", bg: "from-gray-700 to-gray-900", img: "https://placehold.co/600x200/1f2937/white?text=Fashion" },
-  { title: "Шинэ технологи", desc: "Samsung, Apple, Xiaomi, Sony", bg: "from-violet-700 to-violet-900", img: "https://placehold.co/600x200/4c1d95/white?text=Tech" },
+  { title: "Гэрийн тав тухтай бараа", desc: "HomeStyle, IKEA, Philips", bg: "from-amber-700 to-amber-900", img: "https://picsum.photos/seed/home-collection/600/200" },
+  { title: "Загварлаг хувцас", desc: "Zara, H&M, Nike, Adidas", bg: "from-gray-700 to-gray-900", img: "https://picsum.photos/seed/fashion-collection/600/200" },
+  { title: "Шинэ технологи", desc: "Samsung, Apple, Xiaomi, Sony", bg: "from-violet-700 to-violet-900", img: "https://picsum.photos/seed/tech-collection/600/200" },
 ];
 
 const BROWSE_CATEGORIES: { label: string; color: string; value: Category; items: string[] }[] = [
@@ -251,7 +251,8 @@ function BrandsView({ searchFor }: { searchFor: (q: string) => void }) {
                 <div className="flex flex-wrap gap-2">
                   {brands.map((b) => (
                     <button key={b.id} onClick={() => searchFor(b.name)}
-                      className="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:border-primary/40 hover:text-primary hover:shadow-md transition-all">
+                      className="flex items-center gap-2.5 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:border-primary/40 hover:text-primary hover:shadow-md transition-all">
+                      {b.logo && <img src={b.logo} alt={b.name} className="w-6 h-6 rounded-full object-cover" />}
                       {b.name}
                     </button>
                   ))}
@@ -271,9 +272,7 @@ function BrandsView({ searchFor }: { searchFor: (q: string) => void }) {
                     <button key={s.id} onClick={() => searchFor(s.name)}
                       className="bg-white border border-gray-200 rounded-2xl p-4 text-left hover:border-primary/40 hover:shadow-md transition-all group">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-sm font-bold text-gray-500 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-                          {s.name.charAt(0)}
-                        </div>
+                        <img src={`https://picsum.photos/seed/${s.id}/80/80`} alt={s.name} className="w-10 h-10 rounded-full object-cover bg-gray-100" />
                         <div className="min-w-0">
                           <p className="text-sm font-medium text-black truncate">{s.name}</p>
                           <p className="text-[11px] text-gray-400">{s.category}</p>

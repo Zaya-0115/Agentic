@@ -25,7 +25,7 @@ export const codyAdapter: MerchantAdapter = {
         price: onSale ? +(price * 0.75).toFixed(2) : price,
         originalPrice: onSale ? price : undefined,
         currency: "USD",
-        image: `https://placehold.co/400x400/6C3CE1/white?text=${encodeURIComponent(query.slice(0, 10))}`,
+        image: `https://picsum.photos/seed/cody-${i}/400/400`,
         url: `https://${merchant.toLowerCase()}/product/cody-${i}`,
         source: "cody" as const,
         merchantName: merchant,

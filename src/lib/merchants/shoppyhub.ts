@@ -19,7 +19,7 @@ export const shoppyhubAdapter: MerchantAdapter = {
         price: onSale ? +(price * 0.78).toFixed(2) : price,
         originalPrice: onSale ? price : undefined,
         currency: "USD",
-        image: `https://placehold.co/400x400/1A8FE3/white?text=${encodeURIComponent(query.slice(0, 10))}`,
+        image: `https://picsum.photos/seed/shoppyhub-${i}/400/400`,
         url: `https://shoppyhub.mn/product/shoppyhub-${i}`,
         source: "shoppyhub" as const,
         merchantName: "ShoppyHub.mn",
