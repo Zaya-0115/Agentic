@@ -233,58 +233,87 @@ function BrowseView({ searchFor }: {
 
 /* ==================== OTHER VIEWS ==================== */
 function BrandsView({ searchFor }: { searchFor: (q: string) => void }) {
-  const brandsByCategory = getBrandsByCategory();
-  const storesByPlatform = getStoresByPlatform();
+  const [following, setFollowing] = useState<Set<string>>(new Set());
+  const toggle = (id: string) => {
+    setFollowing((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
   return (
     <div className="flex flex-col">
-      <div className="max-w-6xl mx-auto px-6 py-6 space-y-10 w-full">
-        <div>
-          <h1 className="text-2xl font-bold text-black">Брэнд & Дэлгүүрүүд</h1>
-          <p className="text-sm text-gray-400 mt-1">Бүх платформын брэнд, дэлгүүрүүдийн жагсаалт</p>
-        </div>
-        <section>
-          <h2 className="text-lg font-bold text-black mb-4">Брэндүүд</h2>
-          <div className="space-y-6">
-            {Array.from(brandsByCategory.entries()).map(([category, brands]) => (
-              <div key={category}>
-                <h3 className="text-sm font-semibold text-gray-500 mb-2">{category}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {brands.map((b) => (
-                    <button key={b.id} onClick={() => searchFor(b.name)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:border-primary/40 hover:text-primary hover:shadow-md transition-all">
-                      {b.logo && <img src={b.logo} alt={b.name} className="w-6 h-6 rounded-full object-cover" />}
-                      {b.name}
-                    </button>
-                  ))}
+      <div className="max-w-6xl mx-auto px-6 py-6 space-y-8 w-full">
+        {STORES.map((store) => {
+          const isFollowing = following.has(store.id);
+          const products = Array.from({ length: 6 }, (_, i) => ({
+            id: `${store.id}-p${i}`,
+            title: `${store.category} #${i + 1}`,
+            image: `https://picsum.photos/seed/${store.id}-${i}/300/300`,
+            price: Math.floor(15000 + Math.random() * 85000),
+            rating: +(3.5 + Math.random() * 1.5).toFixed(1),
+            reviews: Math.floor(50 + Math.random() * 2000),
+            discount: Math.random() > 0.5 ? Math.floor(10 + Math.random() * 30) : 0,
+          }));
+          return (
+            <div key={store.id} className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+              {/* Store header */}
+              <div className="flex items-center justify-between px-5 py-4">
+                <div className="flex items-center gap-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={`https://picsum.photos/seed/${store.id}-logo/80/80`} alt={store.name} className="w-10 h-10 rounded-full object-cover bg-gray-100" />
+                  <div>
+                    <h3 className="text-sm font-bold text-black">{store.name}</h3>
+                    <p className="text-[11px] text-gray-400">{store.category}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button onClick={() => toggle(store.id)}
+                    className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
+                      isFollowing
+                        ? "bg-primary text-white"
+                        : "border border-gray-200 text-gray-500 hover:border-primary hover:text-primary"
+                    }`}>
+                    {isFollowing ? "Дагаж байна" : "Дагах"}
+                  </button>
+                  <button onClick={() => searchFor(store.name)}
+                    className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-black hover:border-gray-400 transition-colors">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                    </svg>
+                  </button>
                 </div>
               </div>
-            ))}
-          </div>
-        </section>
-        <section>
-          <h2 className="text-lg font-bold text-black mb-4">Дэлгүүрүүд</h2>
-          <div className="space-y-6">
-            {Array.from(storesByPlatform.entries()).map(([platform, stores]) => (
-              <div key={platform}>
-                <h3 className="text-sm font-semibold text-gray-500 mb-2">{platform}</h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                  {stores.map((s) => (
-                    <button key={s.id} onClick={() => searchFor(s.name)}
-                      className="bg-white border border-gray-200 rounded-2xl p-4 text-left hover:border-primary/40 hover:shadow-md transition-all group">
-                      <div className="flex items-center gap-3">
-                        <img src={`https://picsum.photos/seed/${s.id}/80/80`} alt={s.name} className="w-10 h-10 rounded-full object-cover bg-gray-100" />
-                        <div className="min-w-0">
-                          <p className="text-sm font-medium text-black truncate">{s.name}</p>
-                          <p className="text-[11px] text-gray-400">{s.category}</p>
-                        </div>
+              {/* Horizontal product scroll */}
+              <div className="flex gap-3 px-5 pb-5 overflow-x-auto scrollbar-hide">
+                {products.map((p) => (
+                  <button key={p.id} onClick={() => searchFor(store.name)}
+                    className="shrink-0 w-40 text-left group">
+                    <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-50 mb-2">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={p.image} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                      {p.discount > 0 && (
+                        <span className="absolute top-2 left-2 text-[10px] font-semibold bg-red-500 text-white px-1.5 py-0.5 rounded">{p.discount}% off</span>
+                      )}
+                      <div className="absolute bottom-2 right-2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <svg className="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                        </svg>
                       </div>
-                    </button>
-                  ))}
-                </div>
+                    </div>
+                    <p className="text-xs text-gray-800 font-medium truncate">{p.title}</p>
+                    <div className="flex items-center gap-1 text-[10px] text-gray-400">
+                      <span className="text-yellow-500">{"★".repeat(Math.round(p.rating))}</span>
+                      <span>({p.reviews.toLocaleString()})</span>
+                    </div>
+                    <p className="text-sm font-bold text-black">{p.price.toLocaleString()}₮</p>
+                  </button>
+                ))}
               </div>
-            ))}
-          </div>
-        </section>
+            </div>
+          );
+        })}
         <SiteFooter />
       </div>
     </div>
