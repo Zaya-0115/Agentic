@@ -8,6 +8,7 @@ import Sidebar from "./Sidebar";
 import ChatView from "./ChatView";
 import ProductDetail from "./ProductDetail";
 import WalletView from "./WalletView";
+import CheckoutView from "./CheckoutView";
 import ProfileView from "./ProfileView";
 import { BRANDS as BRAND_DATA, STORES, getBrandsByCategory, getStoresByPlatform } from "@/lib/merchants/brands";
 import SiteFooter from "./Footer";
@@ -63,6 +64,7 @@ export default function ChatInterface() {
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [activePage, setActivePage] = useState("home");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [showCheckout, setShowCheckout] = useState(false);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
@@ -114,7 +116,7 @@ export default function ChatInterface() {
     }
     if (activePage === "cart") {
       return <CartView items={cart.items} totalPrice={cart.totalPrice}
-        onRemove={cart.removeFromCart} onUpdateQty={cart.updateQuantity} />;
+        onRemove={cart.removeFromCart} onUpdateQty={cart.updateQuantity} onCheckout={() => setShowCheckout(true)} />;
     }
     if (activePage === "favorites") return <PlaceholderPage title="Хадгалсан" desc="Танд таалагдсан бараанууд энд хадгалагдана." />;
     if (activePage === "wallet") return <WalletView />;
@@ -139,6 +141,9 @@ export default function ChatInterface() {
           </div>
         )}
       </div>
+      {showCheckout && cart.items.length > 0 && (
+        <CheckoutView items={cart.items} onClose={() => setShowCheckout(false)} onComplete={() => { setShowCheckout(false); }} />
+      )}
       {selectedProduct && (
         <ProductDetail
           product={selectedProduct}
@@ -388,9 +393,9 @@ function PlaceholderPage({ title, desc }: { title: string; desc: string }) {
   );
 }
 
-function CartView({ items, totalPrice, onRemove, onUpdateQty }: {
+function CartView({ items, totalPrice, onRemove, onUpdateQty, onCheckout }: {
   items: CartItem[]; totalPrice: number;
-  onRemove: (id: string) => void; onUpdateQty: (id: string, qty: number) => void;
+  onRemove: (id: string) => void; onUpdateQty: (id: string, qty: number) => void; onCheckout: () => void;
 }) {
   if (items.length === 0) return <PlaceholderPage title="Сагс хоосон байна" desc="Бараа хайж сагслаарай." />;
 
@@ -466,7 +471,7 @@ function CartView({ items, totalPrice, onRemove, onUpdateQty }: {
             <span className="text-sm text-gray-400">{"Нийт дүн"}</span>
             <span className="text-2xl font-bold text-black">{fmt(totalPrice)}</span>
           </div>
-          <button className="w-full py-3.5 bg-primary hover:bg-primary-light text-white font-medium rounded-xl transition-colors">{"Төлбөр төлөх"}</button>
+          <button onClick={onCheckout} className="w-full py-3.5 bg-primary hover:bg-primary-light text-white font-medium rounded-xl transition-colors">{"Төлбөр төлөх"}</button>
         </div>
       </footer>
     </div>
