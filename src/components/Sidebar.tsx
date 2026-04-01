@@ -35,7 +35,7 @@ export default function Sidebar({ active, onNavigate, cartCount = 0 }: Props) {
             item.id === "cart" && cartCount > 0 && active === "cart"
               ? "w-12 h-12 bg-primary text-white shadow-lg shadow-primary/40 ring-2 ring-primary/30"
               : item.id === "cart" && cartCount > 0
-                ? "w-10 h-10 text-white bg-primary/20 ring-1 ring-primary/30"
+                ? "w-10 h-10 text-white bg-primary ring-2 ring-primary/40 shadow-md shadow-primary/30"
                 : active === item.id
                   ? "w-10 h-10 bg-white/15 text-white"
                   : "w-10 h-10 text-white/40 hover:text-white/70 hover:bg-white/10"
