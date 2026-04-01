@@ -302,22 +302,20 @@ export default function ChatView({ onAddToCart }: Props) {
                 <button onClick={() => setImagePreview(null)} className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center text-[10px]">×</button>
               </div>
             )}
-            <form onSubmit={handleSubmit} className="relative flex items-center gap-2">
+            <form onSubmit={handleSubmit} className="relative">
               <input type="file" ref={fileRef} accept="image/*" onChange={handleFileChange} className="hidden" />
               <button type="button" onClick={() => fileRef.current?.click()}
-                className="w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary/40 transition-colors shrink-0">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" /></svg>
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary transition-colors z-10">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" /></svg>
               </button>
-              <div className="flex-1 relative">
-                <input type="text" value={input} onChange={(e) => setInput(e.target.value)}
-                  placeholder="Бараа хайх, зураг хавсаргах..."
-                  className="w-full bg-white border border-gray-200 rounded-2xl px-5 py-3.5 pr-12 text-sm text-black placeholder:text-gray-400 focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 shadow-sm"
-                  disabled={isLoading} />
-                <button type="submit" disabled={isLoading || (!input.trim() && !imagePreview)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-xl bg-primary hover:bg-primary-light disabled:opacity-30 text-white flex items-center justify-center transition-colors">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg>
-                </button>
-              </div>
+              <input type="text" value={input} onChange={(e) => setInput(e.target.value)}
+                placeholder="Бараа хайх, зураг хавсаргах..."
+                className="w-full bg-white border border-gray-200 rounded-2xl pl-11 pr-12 py-3.5 text-sm text-black placeholder:text-gray-400 focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 shadow-sm"
+                disabled={isLoading} />
+              <button type="submit" disabled={isLoading || (!input.trim() && !imagePreview)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-xl bg-primary hover:bg-primary-light disabled:opacity-30 text-white flex items-center justify-center transition-colors">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg>
+              </button>
             </form>
           </div>
         </div>
