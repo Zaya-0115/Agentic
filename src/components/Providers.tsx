@@ -1,0 +1,6 @@
+"use client";
+import { LanguageProvider } from "@/hooks/useLanguage";
+
+export default function Providers({ children }: { children: React.ReactNode }) {
+  return <LanguageProvider>{children}</LanguageProvider>;
+}
