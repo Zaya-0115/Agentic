@@ -584,41 +584,29 @@ function ResultsView({ input, setInput, isLoading, handleSubmit, lastMsg, filter
           {(filters.category !== "all" || filters.onSale || filters.minRating > 0 || filters.priceRange[1] < 1000 || filters.sources.length < ALL_SOURCES.length || filters.brand) && (
             <div className="mt-2 flex items-center gap-2 flex-wrap">
               {filters.category !== "all" && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
                   {CATEGORIES.find(c => c.value === filters.category)?.label}
-                  <button onClick={() => updateFilter({ category: "all" })} className="hover:text-red-500">×</button>
                 </span>
               )}
               {filters.onSale && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
-                  {"Хямдрал"}
-                  <button onClick={() => updateFilter({ onSale: false })} className="hover:text-red-500">×</button>
-                </span>
+                <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">{"Хямдрал"}</span>
               )}
               {filters.minRating > 0 && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
-                  {filters.minRating}+ {"од"}
-                  <button onClick={() => updateFilter({ minRating: 0 })} className="hover:text-red-500">×</button>
-                </span>
+                <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">{filters.minRating}+ {"од"}</span>
               )}
               {filters.priceRange[1] < 1000 && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
-                  ${filters.priceRange[0]}-${filters.priceRange[1]}
-                  <button onClick={() => updateFilter({ priceRange: [0, 1000] })} className="hover:text-red-500">×</button>
-                </span>
+                <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">${filters.priceRange[0]}-${filters.priceRange[1]}</span>
               )}
               {filters.sources.length < ALL_SOURCES.length && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
-                  {filters.sources.map(s => PLATFORM_LABELS[s]).join(", ")}
-                  <button onClick={() => updateFilter({ sources: ALL_SOURCES })} className="hover:text-red-500">×</button>
-                </span>
+                <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">{filters.sources.map(s => PLATFORM_LABELS[s]).join(", ")}</span>
               )}
               {filters.brand && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
-                  {filters.brand}
-                  <button onClick={() => updateFilter({ brand: "" })} className="hover:text-red-500">×</button>
-                </span>
+                <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">{filters.brand}</span>
               )}
+              <button onClick={() => updateFilter({ category: "all", onSale: false, minRating: 0, priceRange: [0, 1000], sources: ALL_SOURCES, brand: "" })}
+                className="ml-auto w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors shrink-0">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
             </div>
           )}
 
