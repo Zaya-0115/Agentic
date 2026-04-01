@@ -504,68 +504,126 @@ function ResultsView({ input, setInput, isLoading, handleSubmit, lastMsg, filter
 }) {
   return (
     <div className="flex-1 flex flex-col">
+      {/* Header - logo only */}
       <header className="shrink-0 border-b border-gray-200 bg-white">
-        <div className="max-w-7xl mx-auto px-6 pt-3 pb-1">
+        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
           <span className="text-2xl font-bold text-black tracking-tight">Sel<span className="text-primary">ec</span>to</span>
-          <span className="text-xs text-gray-400 ml-3">{filtered.length} {"үр дүн"}</span>
+          <span className="text-xs text-gray-400">{filtered.length} {"үр дүн"}</span>
         </div>
-        <div className="max-w-7xl mx-auto px-6 pb-3 flex items-center gap-2 flex-wrap">
-            <FDrop label="Ангилал" onChange={(v) => updateFilter({ category: v as Category })}>
+      </header>
+
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* AI summary */}
+          {lastMsg && (
+            <div className="mt-4 px-4 py-3 rounded-2xl bg-white border border-gray-100 text-sm text-black/70 shadow-sm"
+              dangerouslySetInnerHTML={{ __html: lastMsg.content.replace(/\*\*(.*?)\*\*/g, '<strong class="text-black">$1</strong>') }} />
+          )}
+
+          {/* Loading */}
+          {isLoading && (
+            <div className="mt-4 px-4 py-3 rounded-2xl bg-white border border-gray-100 shadow-sm">
+              <div className="flex items-center gap-2 text-gray-400 text-sm">
+                <span className="flex gap-1"><span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" /><span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce [animation-delay:0.15s]" /><span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce [animation-delay:0.3s]" /></span>
+                {"Хайж байна..."}
+              </div>
+            </div>
+          )}
+
+          {/* Filters - separate row */}
+          <div className="mt-4 flex items-center gap-2 flex-wrap">
+            <FDrop label={"Ангилал"} onChange={(v) => updateFilter({ category: v as Category })}>
               {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
             </FDrop>
-            <FDrop label="Эрэмбэлэх" onChange={(v) => updateFilter({ sortBy: v as SortOption })}>
+            <FDrop label={"Эрэмбэлэх"} onChange={(v) => updateFilter({ sortBy: v as SortOption })}>
               {SORT_OPTIONS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
             </FDrop>
-            <FDrop label="Үнэлгээ" onChange={(v) => updateFilter({ minRating: Number(v) })}>
+            <FDrop label={"Үнэлгээ"} onChange={(v) => updateFilter({ minRating: Number(v) })}>
               {RATING_OPTIONS.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
             </FDrop>
-            <FDrop label="Үнэ" onChange={(v) => {
+            <FDrop label={"Үнэ"} onChange={(v) => {
               const ranges: Record<string, [number, number]> = { "all": [0, 1000], "0-25": [0, 25], "25-50": [25, 50], "50-100": [50, 100], "100-200": [100, 200], "200+": [200, 1000] };
               updateFilter({ priceRange: ranges[v] || [0, 1000] });
             }}>
-              <option value="all">Бүх үнэ</option><option value="0-25">$25 хүртэл</option><option value="25-50">$25-$50</option>
-              <option value="50-100">$50-$100</option><option value="100-200">$100-$200</option><option value="200+">$200+</option>
+              <option value="all">{"Бүх үнэ"}</option>
+              <option value="0-25">$25 {"хүртэл"}</option>
+              <option value="25-50">$25-$50</option>
+              <option value="50-100">$50-$100</option>
+              <option value="100-200">$100-$200</option>
+              <option value="200+">$200+</option>
             </FDrop>
             <button onClick={() => updateFilter({ onSale: !filters.onSale })}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${filters.onSale ? "bg-primary text-white border-primary" : "bg-white text-gray-500 border-gray-200 hover:border-gray-300"}`}>Хямдрал</button>
-            <FDrop label="Платформ" onChange={(v) => { if (v === "all") { updateFilter({ sources: ALL_SOURCES }); return; } updateFilter({ sources: [v as MerchantSource] }); }}>
-              <option value="all">Бүх платформ</option>
+              className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${filters.onSale ? "bg-primary text-white border-primary" : "bg-white text-gray-500 border-gray-200 hover:border-gray-300"}`}>{"Хямдрал"}</button>
+            <FDrop label={"Платформ"} onChange={(v) => { if (v === "all") { updateFilter({ sources: ALL_SOURCES }); return; } updateFilter({ sources: [v as MerchantSource] }); }}>
+              <option value="all">{"Бүх платформ"}</option>
               {ALL_SOURCES.map(s => <option key={s} value={s}>{PLATFORM_LABELS[s]}</option>)}
             </FDrop>
             {allBrands.length > 0 && (
-              <FDrop label="Брэнд" onChange={(v) => updateFilter({ brand: v === "all" ? "" : v })}>
-                <option value="all">Бүх брэнд</option>
+              <FDrop label={"Брэнд"} onChange={(v) => updateFilter({ brand: v === "all" ? "" : v })}>
+                <option value="all">{"Бүх брэнд"}</option>
                 {allBrands.map(b => <option key={b} value={b}>{b}</option>)}
               </FDrop>
             )}
-        </div>
-      </header>
-      <div className="flex-1 overflow-y-auto">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          {lastMsg && (
-            <div className="mb-4 px-4 py-3 rounded-2xl bg-white border border-gray-100 text-sm text-black/70 shadow-sm"
-              dangerouslySetInnerHTML={{ __html: lastMsg.content.replace(/\*\*(.*?)\*\*/g, '<strong class="text-black">$1</strong>') }} />
-          )}
-          {isLoading && (
-            <div className="mb-4 px-4 py-3 rounded-2xl bg-white border border-gray-100 shadow-sm">
-              <div className="flex items-center gap-2 text-gray-400 text-sm">
-                <span className="flex gap-1"><span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" /><span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce [animation-delay:0.15s]" /><span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce [animation-delay:0.3s]" /></span>Хайж байна...</div>
+          </div>
+
+          {/* Active filter tags */}
+          {(filters.category !== "all" || filters.onSale || filters.minRating > 0 || filters.priceRange[1] < 1000 || filters.sources.length < ALL_SOURCES.length || filters.brand) && (
+            <div className="mt-2 flex items-center gap-2 flex-wrap">
+              {filters.category !== "all" && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                  {CATEGORIES.find(c => c.value === filters.category)?.label}
+                  <button onClick={() => updateFilter({ category: "all" })} className="hover:text-red-500">×</button>
+                </span>
+              )}
+              {filters.onSale && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                  {"Хямдрал"}
+                  <button onClick={() => updateFilter({ onSale: false })} className="hover:text-red-500">×</button>
+                </span>
+              )}
+              {filters.minRating > 0 && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                  {filters.minRating}+ {"од"}
+                  <button onClick={() => updateFilter({ minRating: 0 })} className="hover:text-red-500">×</button>
+                </span>
+              )}
+              {filters.priceRange[1] < 1000 && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                  ${filters.priceRange[0]}-${filters.priceRange[1]}
+                  <button onClick={() => updateFilter({ priceRange: [0, 1000] })} className="hover:text-red-500">×</button>
+                </span>
+              )}
+              {filters.sources.length < ALL_SOURCES.length && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                  {filters.sources.map(s => PLATFORM_LABELS[s]).join(", ")}
+                  <button onClick={() => updateFilter({ sources: ALL_SOURCES })} className="hover:text-red-500">×</button>
+                </span>
+              )}
+              {filters.brand && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                  {filters.brand}
+                  <button onClick={() => updateFilter({ brand: "" })} className="hover:text-red-500">×</button>
+                </span>
+              )}
             </div>
           )}
-          {filtered.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              {filtered.map((p: Product) => (<ProductCard key={p.id} product={p} onAddToCart={onAddToCart} />))}
-            </div>
-          ) : (<p className="text-center py-16 text-gray-400 text-sm">Таны шүүлтүүрт тохирох бараа олдсонгүй.</p>)}
-          <SiteFooter />
+
+          {/* Product grid */}
+          <div className="mt-4 pb-20">
+            {filtered.length > 0 ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                {filtered.map((p: Product) => (<ProductCard key={p.id} product={p} onAddToCart={onAddToCart} onFavorite={() => {}} />))}
+              </div>
+            ) : (<p className="text-center py-16 text-gray-400 text-sm">{"Таны шүүлтүүрт тохирох бараа олдсонгүй."}</p>)}
+            <SiteFooter />
+          </div>
         </div>
       </div>
-
     </div>
   );
 }
 
-/* ==================== HELPERS ==================== */
 function FDrop({ label, onChange, children }: { label: string; onChange: (v: string) => void; children: React.ReactNode; }) {
   return (
     <div className="relative">
