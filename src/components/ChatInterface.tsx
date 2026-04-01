@@ -442,23 +442,7 @@ function LandingView({ input, setInput, isLoading, handleSubmit }: {
           <div className="absolute bottom-[35%] right-[30%] w-40 h-40 rounded-full bg-gradient-to-br from-orange-300/25 to-red-200/15 blur-2xl animate-float-delayed" />
         </div>
 
-        {/* Flowing names - top */}
-        <div className="absolute top-8 left-0 right-0 overflow-hidden z-[1]">
-          <div className="flex animate-marquee whitespace-nowrap">
-            {[...NAMES_ROW1, ...NAMES_ROW1, ...NAMES_ROW1].map((n, i) => (
-              <span key={i} className="mx-3 px-5 py-2 rounded-full bg-white/40 backdrop-blur-sm border border-white/50 text-sm font-medium text-gray-500/70 select-none">{n}</span>
-            ))}
-          </div>
-        </div>
 
-        {/* Flowing names - upper mid */}
-        <div className="absolute top-20 left-0 right-0 overflow-hidden z-[1]">
-          <div className="flex animate-marquee-reverse whitespace-nowrap">
-            {[...NAMES_ROW2, ...NAMES_ROW2, ...NAMES_ROW2].map((n, i) => (
-              <span key={i} className="mx-3 px-5 py-2 rounded-full bg-white/40 backdrop-blur-sm border border-white/50 text-sm font-medium text-gray-500/70 select-none">{n}</span>
-            ))}
-          </div>
-        </div>
 
         {/* Center content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-6">
@@ -477,18 +461,9 @@ function LandingView({ input, setInput, isLoading, handleSubmit }: {
           </form>
         </div>
 
-        {/* Flowing names - lower */}
-        <div className="absolute bottom-20 left-0 right-0 overflow-hidden z-[1]">
-          <div className="flex animate-marquee whitespace-nowrap">
-            {[...NAMES_ROW2, ...NAMES_ROW1, ...NAMES_ROW2].map((n, i) => (
-              <span key={i} className="mx-3 px-5 py-2 rounded-full bg-white/40 backdrop-blur-sm border border-white/50 text-sm font-medium text-gray-500/70 select-none">{n}</span>
-            ))}
-          </div>
-        </div>
-
         {/* Flowing names - bottom */}
-        <div className="absolute bottom-6 left-0 right-0 overflow-hidden z-[1]">
-          <div className="flex animate-marquee-reverse whitespace-nowrap">
+        <div className="absolute bottom-8 left-0 right-0 overflow-hidden z-[1]">
+          <div className="flex animate-marquee whitespace-nowrap">
             {[...NAMES_ROW1, ...NAMES_ROW2, ...NAMES_ROW1].map((n, i) => (
               <span key={i} className="mx-3 px-5 py-2 rounded-full bg-white/40 backdrop-blur-sm border border-white/50 text-sm font-medium text-gray-500/70 select-none">{n}</span>
             ))}
