@@ -270,9 +270,13 @@ function BrowseView({ searchFor, onAddToCart, onFavorite, onProductClick }: {
           <h3 className="text-base font-bold text-black mb-4">{"Топ борлуулалт"}</h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
             {TOP_PRODUCTS.map((p) => {
+              const storeSourceMap: Record<string, MerchantSource> = {
+                "Shoppy.mn": "shoppy", "Zary.mn": "zary", "ShoppyHub.mn": "shoppyhub",
+                "TechStore.mn": "cody", "FashionHub.mn": "cody", "HomeStyle.mn": "cody",
+              };
               const prod: Product = {
                 id: p.id, title: p.title, description: p.title, price: p.price,
-                currency: "MNT", image: p.img, source: "cody" as const,
+                currency: "MNT", image: p.img, source: (storeSourceMap[p.store] || "cody") as MerchantSource,
                 merchantName: p.store, category: "electronics" as const,
                 rating: p.rating, reviewCount: Math.floor(Math.random() * 500),
                 onSale: Math.random() > 0.6, inStock: true,

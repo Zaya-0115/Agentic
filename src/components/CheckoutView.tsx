@@ -28,22 +28,24 @@ export default function CheckoutView({ items, onClose, onComplete }: Props) {
   const [step, setStep] = useState<"review" | "payment" | "done">("review");
   const [selectedPayment, setSelectedPayment] = useState("wallet");
 
-  // Group by merchant source
+  // Group by merchantName (each merchant gets own order)
   const grouped = new Map<string, CartItem[]>();
   items.forEach((item) => {
-    const key = item.product.source;
+    const key = item.product.merchantName;
     if (!grouped.has(key)) grouped.set(key, []);
     grouped.get(key)!.push(item);
   });
 
   // Calculate per-merchant orders
-  const orders = Array.from(grouped.entries()).map(([source, sourceItems], idx) => {
+  const orders = Array.from(grouped.entries()).map(([merchantName, sourceItems], idx) => {
+    const source = sourceItems[0].product.source;
     const policy = DELIVERY_POLICY[source] || DELIVERY_POLICY.cody;
     const subtotal = sourceItems.reduce((s, i) => s + i.product.price * i.quantity, 0);
     const deliveryFee = subtotal >= policy.freeAbove ? 0 : policy.fee;
     return {
       id: `ORD-${Date.now()}-${idx}`,
       source: source as MerchantSource,
+      merchantName,
       policy,
       items: sourceItems,
       subtotal,
@@ -78,7 +80,7 @@ export default function CheckoutView({ items, onClose, onComplete }: Props) {
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-bold text-gray-700">Захиалга #{idx + 1}</span>
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/80 text-gray-600">{order.policy.label}</span>
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/80 text-gray-600">{order.merchantName}</span>
                     </div>
                     <span className="text-sm font-bold text-black">{fmt(order.total)}</span>
                   </div>
@@ -176,7 +178,7 @@ export default function CheckoutView({ items, onClose, onComplete }: Props) {
                 {orders.map((o, i) => (
                   <div key={o.id} className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3">
                     <div>
-                      <p className="text-xs font-medium text-black">{o.policy.label}</p>
+                      <p className="text-xs font-medium text-black">{o.merchantName}</p>
                       <p className="text-[10px] text-gray-400">Хүргэлт: {o.policy.time}</p>
                     </div>
                     <span className="text-xs font-bold text-black">{fmt(o.total)}</span>
