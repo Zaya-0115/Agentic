@@ -114,7 +114,8 @@ export default function ChatInterface() {
       return <CartView items={cart.items} totalPrice={cart.totalPrice}
         onRemove={cart.removeFromCart} onUpdateQty={cart.updateQuantity} />;
     }
-    if (activePage === "brands") return <BrandsView searchFor={searchFor} />;
+    if (activePage === "favorites") return <PlaceholderPage title="Хадгалсан" desc="Танд таалагдсан бараанууд энд хадгалагдана." />;
+    if (activePage === "wallet") return <PlaceholderPage title="Хэтэвч" desc="Төлбөрийн арга, түүх болон гүйлгээний түүх." />;
     if (activePage === "favorites") return <PlaceholderPage title="Хадгалсан" desc="Танд таалагдсан бараануудыг энд хадгалагдана." />;
     return <LandingView input={input} setInput={setInput} isLoading={isLoading} handleSubmit={handleSubmit} />;
   };
