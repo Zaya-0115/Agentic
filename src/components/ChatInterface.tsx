@@ -7,6 +7,7 @@ import ProductCard from "./ProductCard";
 import Sidebar from "./Sidebar";
 import ChatView from "./ChatView";
 import ProductDetail from "./ProductDetail";
+import WalletView from "./WalletView";
 import { BRANDS as BRAND_DATA, STORES, getBrandsByCategory, getStoresByPlatform } from "@/lib/merchants/brands";
 import SiteFooter from "./Footer";
 
@@ -115,7 +116,7 @@ export default function ChatInterface() {
         onRemove={cart.removeFromCart} onUpdateQty={cart.updateQuantity} />;
     }
     if (activePage === "favorites") return <PlaceholderPage title="Хадгалсан" desc="Танд таалагдсан бараанууд энд хадгалагдана." />;
-    if (activePage === "wallet") return <PlaceholderPage title="Хэтэвч" desc="Төлбөрийн арга, түүх болон гүйлгээний түүх." />;
+    if (activePage === "wallet") return <WalletView />;
     if (activePage === "favorites") return <PlaceholderPage title="Хадгалсан" desc="Танд таалагдсан бараануудыг энд хадгалагдана." />;
     return <LandingView input={input} setInput={setInput} isLoading={isLoading} handleSubmit={handleSubmit} />;
   };
