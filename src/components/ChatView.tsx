@@ -115,7 +115,14 @@ export default function ChatView({ onAddToCart }: Props) {
           {messages.map((msg) => (
             <div key={msg.id}>
               <div className={`flex items-end ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                {msg.role === "assistant" && (
+                {msg.role === "user" && (
+                <div className="order-2 w-7 h-7 rounded-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center shrink-0 ml-2">
+                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                  </svg>
+                </div>
+              )}
+              {msg.role === "assistant" && (
                 <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-indigo-500 flex items-center justify-center shrink-0 mr-2">
                   <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none">
                     <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" />
