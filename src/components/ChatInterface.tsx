@@ -424,54 +424,56 @@ function LandingView({ input, setInput, isLoading, handleSubmit }: {
   input: string; setInput: (v: string) => void; isLoading: boolean;
   handleSubmit: (e: React.FormEvent) => void;
 }) {
-  const NAMES = ["Shoppy.mn", "Zary.mn", "ShoppyHub.mn", "TechStore.mn", "FashionHub.mn", "HomeStyle.mn", "GadgetWorld.mn", "SportZone.mn", "BeautyBox.mn", "KidsPlay.mn", "Samsung", "Nike", "Apple", "Adidas", "IKEA", "Xiaomi"];
+  const FLOATING = [
+    { name: "Shoppy.mn", color: "from-purple-500 to-violet-600", pos: "top-[8%] left-[8%]", size: "w-28 h-28", anim: "animate-float" },
+    { name: "MUJI", color: "from-amber-800 to-amber-900", pos: "top-[5%] left-[28%]", size: "w-20 h-20", anim: "animate-float-delayed" },
+    { name: "Zary.mn", color: "from-pink-500 to-rose-600", pos: "top-[12%] right-[8%]", size: "w-28 h-28", anim: "animate-float-slow" },
+    { name: "Samsung", color: "from-blue-600 to-blue-700", pos: "top-[4%] right-[30%]", size: "w-20 h-20", anim: "animate-float" },
+    { name: "TechStore", color: "from-gray-700 to-gray-800", pos: "top-[30%] left-[3%]", size: "w-24 h-24", anim: "animate-float-slow" },
+    { name: "Nike", color: "from-orange-500 to-orange-600", pos: "top-[28%] right-[3%]", size: "w-22 h-22", anim: "animate-float-delayed" },
+    { name: "ShoppyHub", color: "from-emerald-500 to-teal-600", pos: "bottom-[28%] left-[5%]", size: "w-28 h-28", anim: "animate-float-delayed" },
+    { name: "FashionHub", color: "from-fuchsia-500 to-pink-600", pos: "bottom-[22%] left-[25%]", size: "w-20 h-20", anim: "animate-float" },
+    { name: "Apple", color: "from-gray-800 to-black", pos: "bottom-[30%] right-[25%]", size: "w-20 h-20", anim: "animate-float-slow" },
+    { name: "HomeStyle", color: "from-teal-500 to-cyan-600", pos: "bottom-[20%] right-[5%]", size: "w-26 h-26", anim: "animate-float" },
+    { name: "Adidas", color: "from-black to-gray-800", pos: "bottom-[8%] left-[15%]", size: "w-20 h-20", anim: "animate-float-delayed" },
+    { name: "IKEA", color: "from-blue-500 to-yellow-500", pos: "bottom-[10%] right-[12%]", size: "w-22 h-22", anim: "animate-float-slow" },
+  ];
 
   return (
-    <div className="flex flex-col bg-gradient-to-b from-[#f8f7ff] to-[#f5f5f7]">
-      {/* Hero section - full viewport height */}
-      <div className="min-h-screen flex flex-col items-center justify-center relative px-6">
-        {/* Blurred orbs */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-[20%] left-[15%] w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-[30%] right-[15%] w-72 h-72 bg-violet-200/20 rounded-full blur-3xl" />
-          <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-100/30 rounded-full blur-3xl" />
-        </div>
-
-        {/* Rounded content box */}
-        <div className="relative z-10 w-full max-w-2xl bg-white/60 backdrop-blur-xl border border-gray-200/50 rounded-3xl px-8 py-12 shadow-xl shadow-gray-200/30">
-          <div className="flex flex-col items-center">
-            <h1 className="text-6xl font-bold text-black tracking-tight mb-2">Sel<span className="text-primary">ec</span>to</h1>
-            <p className="text-gray-400 text-sm mb-8">AI-powered shopping across all platforms</p>
-            <form onSubmit={handleSubmit} className="w-full max-w-lg mb-6">
-              <div className="relative">
-                <input type="text" value={input} onChange={(e) => setInput(e.target.value)}
-                  placeholder="Та юу хайж байгаа вэ? Энд бичээрэй"
-                  className="w-full bg-white border border-gray-200 rounded-full px-6 py-4 pr-14 text-base text-black placeholder:text-gray-400 focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 shadow-md transition-all"
-                  disabled={isLoading} />
-                <button type="submit" disabled={isLoading || !input.trim()}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-primary hover:bg-primary-light disabled:opacity-30 text-white flex items-center justify-center transition-colors">
-                  <ArrIcon />
-                </button>
+    <div className="flex flex-col bg-[#f0eff5]">
+      {/* Hero - full viewport */}
+      <div className="min-h-screen relative overflow-hidden">
+        {/* Floating brand cards */}
+        <div className="absolute inset-0 pointer-events-none">
+          {FLOATING.map((f, i) => (
+            <div key={i} className={`absolute ${f.pos} ${f.anim}`}>
+              <div className={`${f.size} rounded-2xl bg-gradient-to-br ${f.color} shadow-lg flex items-center justify-center p-3`}>
+                <span className="text-white font-bold text-xs text-center leading-tight">{f.name}</span>
               </div>
-            </form>
-            <div className="w-full">
-              <p className="text-xs font-medium text-black/60 mb-1">Санамж</p>
-              <p className="text-[11px] text-gray-400 leading-relaxed">Хайлтаа илүү нарийвчлан бичвэл илүү сайн үр дүн гарна.</p>
             </div>
-          </div>
+          ))}
         </div>
 
-        {/* Single flowing row below the box */}
-        <div className="relative z-10 w-full mt-8 overflow-hidden">
-          <div className="flex animate-marquee whitespace-nowrap">
-            {[...NAMES, ...NAMES, ...NAMES].map((name, i) => (
-              <span key={i} className="mx-3 px-4 py-1.5 rounded-full bg-white/50 border border-gray-200/40 text-xs font-medium text-gray-400 select-none">{name}</span>
-            ))}
-          </div>
+        {/* Center content */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-6">
+          <h1 className="text-7xl font-bold text-black tracking-tight mb-2">Sel<span className="text-primary">ec</span>to</h1>
+
+          <form onSubmit={handleSubmit} className="w-full max-w-xl mt-6">
+            <div className="relative">
+              <input type="text" value={input} onChange={(e) => setInput(e.target.value)}
+                placeholder="Та юу хайж байгаа вэ? Энд бичээрэй"
+                className="w-full bg-white/90 backdrop-blur-md border border-gray-200/80 rounded-full px-6 py-4 pr-14 text-base text-black placeholder:text-gray-400 focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 shadow-xl shadow-gray-300/30 transition-all"
+                disabled={isLoading} />
+              <button type="submit" disabled={isLoading || !input.trim()}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-primary hover:bg-primary-light disabled:opacity-30 text-white flex items-center justify-center transition-colors">
+                <ArrIcon />
+              </button>
+            </div>
+          </form>
         </div>
       </div>
 
-      {/* Footer - visible after scrolling */}
+      {/* Footer after scroll */}
       <div className="relative z-10">
         <SiteFooter />
       </div>
