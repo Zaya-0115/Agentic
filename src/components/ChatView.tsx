@@ -181,9 +181,9 @@ export default function ChatView({ onAddToCart }: Props) {
       <div className={`${showHistory ? "w-64" : "w-0"} shrink-0 bg-white border-r border-gray-100 overflow-hidden transition-all duration-200`}>
         <div className="p-3 space-y-2">
           <button onClick={newChat}
-            className="w-full flex items-center gap-2 px-3 py-2.5 bg-primary/5 border border-primary/20 rounded-xl text-sm font-medium text-primary hover:bg-primary/10 transition-colors">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-            Шинэ чат эхлүүлэх
+            className="group w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-gray-400 hover:bg-primary hover:text-white transition-all">
+            <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            <span className="text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">{"Шинэ чат"}</span>
           </button>
         </div>
         <div className="border-t border-gray-100" />
