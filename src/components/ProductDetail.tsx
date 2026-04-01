@@ -131,6 +131,20 @@ export default function ProductDetail({ product, similarProducts, onClose, onAdd
                 <p className="text-[11px] text-gray-400">{d.policy}</p>
               </div>
 
+              {/* Store */}
+              <div className="flex items-center gap-3 bg-gray-50 rounded-xl p-3">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`https://picsum.photos/seed/${product.source}-logo/80/80`} alt={product.merchantName} className="w-10 h-10 rounded-full object-cover" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-black">{product.merchantName}</p>
+                  <p className="text-[11px] text-gray-400">{product.source === "cody" ? "Cody SaaS мэрчант" : product.source === "shoppyhub" ? "Олон улсын" : "Монгол платформ"}</p>
+                </div>
+                <button onClick={() => { onClose(); onSelectProduct({ ...product, title: product.merchantName }); }}
+                  className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-600 hover:border-primary hover:text-primary transition-colors">
+                  {"Дэлгүүр үзэх"}
+                </button>
+              </div>
+
               {/* Actions */}
               <div className="flex gap-2">
                 <button onClick={() => onFavorite(product)}
