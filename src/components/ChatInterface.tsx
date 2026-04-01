@@ -131,23 +131,23 @@ export default function ChatInterface() {
             </div>
           </div>
         )}
-        {activePage !== "home" && activePage !== "cart" && activePage !== "chat" && (
-          <div className="shrink-0 z-10 flex justify-center pb-5 pt-3">
-            <form onSubmit={handleSubmit} className="w-full max-w-xl mx-6">
-              <div className="relative">
-                <input type="text" value={input} onChange={(e) => setInput(e.target.value)}
-                  placeholder="Та юу хайж байгаа вэ? Энд бичээрэй."
-                  className="w-full bg-white/70 backdrop-blur-md border border-gray-200/60 rounded-full px-6 py-4 pr-14 text-sm text-black placeholder:text-gray-400 focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 shadow-xl shadow-gray-300/20 transition-all"
-                  disabled={isLoading} />
-                <button type="submit" disabled={isLoading || !input.trim()}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-primary hover:bg-primary-light disabled:opacity-30 text-white flex items-center justify-center transition-colors">
-                  <ArrIcon />
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
       </div>
+      {activePage !== "home" && activePage !== "cart" && activePage !== "chat" && (
+        <div className="fixed bottom-0 left-16 right-0 z-30 flex justify-center pb-5 pt-3 pointer-events-none">
+          <form onSubmit={handleSubmit} className="w-full max-w-xl mx-6 pointer-events-auto">
+            <div className="relative">
+              <input type="text" value={input} onChange={(e) => setInput(e.target.value)}
+                placeholder="Та юу хайж байгаа вэ? Энд бичээрэй."
+                className="w-full bg-white/70 backdrop-blur-md border border-gray-200/60 rounded-full px-6 py-4 pr-14 text-sm text-black placeholder:text-gray-400 focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 shadow-xl shadow-gray-300/20 transition-all"
+                disabled={isLoading} />
+              <button type="submit" disabled={isLoading || !input.trim()}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-primary hover:bg-primary-light disabled:opacity-30 text-white flex items-center justify-center transition-colors">
+                <ArrIcon />
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
