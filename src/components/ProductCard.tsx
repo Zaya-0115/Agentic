@@ -63,7 +63,7 @@ export default function ProductCard({ product, onAddToCart, onFavorite }: {
           <span className="text-[10px] text-gray-400 font-medium">{product.brand}</span>
         )}
         <div className="flex items-baseline gap-2">
-          <span className="text-lg font-bold text-gray-900">{formatPrice(product.price)}</span>
+          <span className={`text-lg font-bold ${product.onSale ? "text-red-500" : "text-gray-900"}`}>{formatPrice(product.price)}</span>
           {product.originalPrice && (
             <span className="text-xs text-gray-400 line-through">{formatPrice(product.originalPrice)}</span>
           )}
