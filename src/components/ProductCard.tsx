@@ -34,7 +34,7 @@ export default function ProductCard({ product, onAddToCart, onFavorite }: {
             <span className="text-gray-500 text-sm font-medium">Дууссан</span>
           </div>
         )}
-        {product.inStock && (
+        {product.inStock && (onAddToCart || onFavorite) && (
           <div className="absolute bottom-2.5 right-2.5 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
             {onFavorite && (
               <button onClick={(e) => { e.stopPropagation(); onFavorite(product); }}
