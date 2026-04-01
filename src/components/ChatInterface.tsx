@@ -424,22 +424,38 @@ function LandingView({ input, setInput, isLoading, handleSubmit }: {
   input: string; setInput: (v: string) => void; isLoading: boolean;
   handleSubmit: (e: React.FormEvent) => void;
 }) {
+  const MERCHANT_NAMES_ROW1 = ["Shoppy.mn", "Zary.mn", "ShoppyHub.mn", "TechStore.mn", "FashionHub.mn", "HomeStyle.mn", "GadgetWorld.mn", "SportZone.mn"];
+  const MERCHANT_NAMES_ROW2 = ["BeautyBox.mn", "KidsPlay.mn", "AutoParts.mn", "Samsung", "Nike", "Apple", "Adidas", "IKEA", "Xiaomi", "H&M"];
+
   return (
     <div className="flex flex-col relative bg-gradient-to-b from-[#f8f7ff] to-[#f5f5f7]">
+      {/* Blurred orbs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {FC.map((c, i) => {
-          const pos = ["top-[8%] left-[5%]","top-[5%] right-[7%]","top-[40%] left-[2%]","top-[35%] right-[2%]",
-            "bottom-[15%] left-[7%]","bottom-[18%] right-[6%]","top-[18%] left-[25%]","top-[15%] right-[25%]"];
-          const anm = ["animate-float","animate-float-delayed","animate-float-slow","animate-float",
-            "animate-float-delayed","animate-float-slow","animate-float","animate-float-slow"];
-          const sz: Array<"sm"|"md"|"lg"> = ["lg","md","md","lg","sm","md","sm","sm"];
-          return <div key={i} className={`absolute ${pos[i]} ${anm[i]}`}><BubbleCard label={c.label} bg={c.bg} size={sz[i]} /></div>;
-        })}
         <div className="absolute top-[20%] left-[15%] w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-[20%] right-[15%] w-72 h-72 bg-violet-200/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-[30%] right-[15%] w-72 h-72 bg-violet-200/20 rounded-full blur-3xl" />
         <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-100/30 rounded-full blur-3xl" />
       </div>
-      <div className="min-h-[80vh] flex flex-col items-center justify-center relative z-10 px-6">
+
+      {/* Flowing merchant names - top */}
+      <div className="pt-8 overflow-hidden">
+        <div className="flex animate-marquee whitespace-nowrap">
+          {[...MERCHANT_NAMES_ROW1, ...MERCHANT_NAMES_ROW1, ...MERCHANT_NAMES_ROW1].map((name, i) => (
+            <span key={i} className="mx-4 px-5 py-2 rounded-full bg-white/50 border border-gray-200/40 text-sm font-medium text-gray-400 select-none backdrop-blur-sm">{name}</span>
+          ))}
+        </div>
+      </div>
+
+      {/* Flowing merchant names - second row (reverse) */}
+      <div className="mt-3 overflow-hidden">
+        <div className="flex animate-marquee-reverse whitespace-nowrap">
+          {[...MERCHANT_NAMES_ROW2, ...MERCHANT_NAMES_ROW2, ...MERCHANT_NAMES_ROW2].map((name, i) => (
+            <span key={i} className="mx-4 px-5 py-2 rounded-full bg-white/50 border border-gray-200/40 text-sm font-medium text-gray-400 select-none backdrop-blur-sm">{name}</span>
+          ))}
+        </div>
+      </div>
+
+      {/* Center content */}
+      <div className="min-h-[60vh] flex flex-col items-center justify-center relative z-10 px-6">
         <h1 className="text-7xl font-bold text-black tracking-tight mb-3">Sel<span className="text-primary">ec</span>to</h1>
         <p className="text-gray-400 text-sm mb-8">AI-powered shopping across all platforms</p>
         <form onSubmit={handleSubmit} className="w-full max-w-xl mb-8">
@@ -460,20 +476,21 @@ function LandingView({ input, setInput, isLoading, handleSubmit }: {
           <p className="text-xs text-gray-400 mt-2 leading-relaxed italic">{'"50,000-аас доош үнэтэй, усны хамгаалалттай ухаалаг цаг" гэх мэт.'}</p>
         </div>
       </div>
-      <div className="relative z-10"><SiteFooter /></div>
-      <div className="shrink-0 py-4 border-t border-gray-100/50 bg-white/40 backdrop-blur-sm overflow-hidden">
+
+      {/* Flowing merchant names - bottom */}
+      <div className="pb-4 overflow-hidden">
         <div className="flex animate-marquee whitespace-nowrap">
-          {[...BRANDS_LIST, ...BRANDS_LIST, ...BRANDS_LIST, ...BRANDS_LIST].map((b, i) => (
-            <span key={i} className="mx-8 text-lg font-semibold text-gray-300 select-none">{b}</span>
+          {[...MERCHANT_NAMES_ROW1, ...MERCHANT_NAMES_ROW2, ...MERCHANT_NAMES_ROW1].map((name, i) => (
+            <span key={i} className="mx-4 px-5 py-2 rounded-full bg-white/50 border border-gray-200/40 text-sm font-medium text-gray-400 select-none backdrop-blur-sm">{name}</span>
           ))}
         </div>
       </div>
+
+      <div className="relative z-10"><SiteFooter /></div>
     </div>
   );
 }
 
-
-/* ==================== RESULTS VIEW ==================== */
 const CATEGORIES: { value: Category; label: string }[] = [
   { value: "all", label: "Бүгд" }, { value: "electronics", label: "Электроник" },
   { value: "fashion", label: "Хувцас" }, { value: "home", label: "Гэр ахуй" },
