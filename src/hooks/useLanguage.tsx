@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback, createContext, useContext, ReactNode } from "react";
+import { useState, useCallback, createContext, useContext, useEffect, ReactNode } from "react";
 
 export type Lang = "mn" | "en";
 
@@ -69,21 +69,23 @@ interface LangContextType {
 
 const LangContext = createContext<LangContextType>({
   lang: "mn",
-  t: (key) => key,
+  t: (key) => T[key]?.mn || key,
   switchLang: () => {},
 });
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>(() => {
-    if (typeof window !== "undefined") return (localStorage.getItem("lang") as Lang) || "mn";
-    return "mn";
-  });
+  const [lang, setLang] = useState<Lang>("mn");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("lang") as Lang;
+    if (saved === "en" || saved === "mn") setLang(saved);
+  }, []);
 
   const t = useCallback((key: string): string => T[key]?.[lang] || key, [lang]);
 
   const switchLang = useCallback((newLang: Lang) => {
     setLang(newLang);
-    if (typeof window !== "undefined") localStorage.setItem("lang", newLang);
+    localStorage.setItem("lang", newLang);
   }, []);
 
   return <LangContext.Provider value={{ lang, t, switchLang }}>{children}</LangContext.Provider>;
