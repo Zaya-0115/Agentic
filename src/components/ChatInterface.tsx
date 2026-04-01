@@ -5,6 +5,7 @@ import { useCart } from "@/hooks/useCart";
 import { Filters, Product, ChatMessage, MerchantSource, Category, SortOption, CartItem } from "@/lib/merchants/types";
 import ProductCard from "./ProductCard";
 import Sidebar from "./Sidebar";
+import ChatView from "./ChatView";
 import { BRANDS as BRAND_DATA, STORES, getBrandsByCategory, getStoresByPlatform } from "@/lib/merchants/brands";
 import SiteFooter from "./Footer";
 
@@ -102,6 +103,9 @@ export default function ChatInterface() {
     }
     if (activePage === "listing") {
       return <BrowseView searchFor={searchFor} />;
+    }
+    if (activePage === "chat") {
+      return <ChatView onAddToCart={cart.addToCart} />;
     }
     if (activePage === "cart") {
       return <CartView items={cart.items} totalPrice={cart.totalPrice}

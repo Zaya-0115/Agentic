@@ -1,0 +1,212 @@
+"use client";
+import { useState, useRef, useEffect } from "react";
+import { Product } from "@/lib/merchants/types";
+
+interface ChatMsg {
+  id: string;
+  role: "user" | "assistant";
+  text: string;
+  products?: Product[];
+  showPayment?: boolean;
+}
+
+const PAYMENT_METHODS = [
+  { id: "qpay", name: "QPay", icon: "Q" },
+  { id: "socialpay", name: "SocialPay", icon: "S" },
+  { id: "card", name: "Карт", icon: "💳" },
+  { id: "monpay", name: "MonPay", icon: "M" },
+];
+
+function fmt(n: number) { return n.toLocaleString("mn-MN") + "₮"; }
+
+interface Props {
+  onAddToCart: (p: Product) => void;
+}
+
+export default function ChatView({ onAddToCart }: Props) {
+  const [messages, setMessages] = useState<ChatMsg[]>([
+    { id: "welcome", role: "assistant", text: "Сайн байна уу! Би таны худалдааны туслах. Ямар бараа хайж байгаагаа бичээрэй." },
+  ]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
+  const [paymentDone, setPaymentDone] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isLoading]);
+
+  const sendMessage = async (text: string) => {
+    if (!text.trim() || isLoading) return;
+    const userMsg: ChatMsg = { id: `u-${Date.now()}`, role: "user", text };
+    setMessages((prev) => [...prev, userMsg]);
+    setInput("");
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text, history: messages.map((m) => ({ role: m.role, content: m.text })) }),
+      });
+      const data = await res.json();
+      const assistantMsg: ChatMsg = {
+        id: `a-${Date.now()}`,
+        role: "assistant",
+        text: data.content || "Бараа олдлоо!",
+        products: data.products?.length > 0 ? data.products : undefined,
+      };
+      setMessages((prev) => [...prev, assistantMsg]);
+    } catch {
+      setMessages((prev) => [...prev, { id: `e-${Date.now()}`, role: "assistant", text: "Алдаа гарлаа. Дахин оролдоно уу." }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddToCart = (p: Product) => {
+    onAddToCart(p);
+    setMessages((prev) => [...prev, {
+      id: `sys-${Date.now()}`,
+      role: "assistant",
+      text: `"${p.title}" сагсанд нэмэгдлээ. Төлбөр төлөх бол "Төлбөр төлөх" гэж бичээрэй.`,
+    }]);
+  };
+
+  const handlePayment = () => {
+    setMessages((prev) => [...prev, {
+      id: `pay-${Date.now()}`,
+      role: "assistant",
+      text: "Төлбөрийн хэлбэрээ сонгоно уу:",
+      showPayment: true,
+    }]);
+  };
+
+  const confirmPayment = (method: string) => {
+    setSelectedPayment(method);
+    setPaymentDone(true);
+    const name = PAYMENT_METHODS.find((m) => m.id === method)?.name || method;
+    setMessages((prev) => [...prev, {
+      id: `done-${Date.now()}`,
+      role: "assistant",
+      text: `${name}-ээр төлбөр амжилттай баталгаажлаа! Захиалга бэлтгэгдэж байна. Баярлалаа! 🎉`,
+    }]);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const t = input.trim().toLowerCase();
+    if (t.includes("төлбөр") || t.includes("төлөх")) {
+      handlePayment();
+      setInput("");
+    } else {
+      sendMessage(input);
+    }
+  };
+
+  return (
+    <div className="flex-1 flex flex-col bg-[#f5f5f7]">
+      {/* Header */}
+      <header className="shrink-0 border-b border-gray-200 bg-white px-6 py-4">
+        <h2 className="text-lg font-bold text-black">AI Худалдааны Туслах</h2>
+        <p className="text-xs text-gray-400">Бараа хайх, сагслах, төлбөр төлөх</p>
+      </header>
+
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto px-6 py-4">
+        <div className="max-w-2xl mx-auto space-y-4">
+          {messages.map((msg) => (
+            <div key={msg.id}>
+              <div className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm ${
+                  msg.role === "user"
+                    ? "bg-primary text-white rounded-br-md"
+                    : "bg-white border border-gray-100 text-black/80 rounded-bl-md shadow-sm"
+                }`}>
+                  {msg.text}
+                </div>
+              </div>
+
+              {/* Product cards */}
+              {msg.products && (
+                <div className="mt-3 grid grid-cols-2 gap-2 max-w-[80%]">
+                  {msg.products.slice(0, 6).map((p) => (
+                    <div key={p.id} className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={p.image} alt={p.title} className="w-full aspect-square object-cover" />
+                      <div className="p-2.5">
+                        <p className="text-xs font-medium text-black truncate">{p.title}</p>
+                        <p className="text-[10px] text-gray-400">{p.merchantName}</p>
+                        <div className="flex items-center justify-between mt-1.5">
+                          <span className="text-sm font-bold text-black">{fmt(p.price)}</span>
+                          <button onClick={() => handleAddToCart(p)}
+                            className="px-2.5 py-1 bg-primary text-white text-[10px] font-medium rounded-lg hover:bg-primary-light transition-colors">
+                            Сагслах
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Payment methods */}
+              {msg.showPayment && !paymentDone && (
+                <div className="mt-3 max-w-[80%] grid grid-cols-2 gap-2">
+                  {PAYMENT_METHODS.map((m) => (
+                    <button key={m.id} onClick={() => confirmPayment(m.id)}
+                      className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
+                        selectedPayment === m.id
+                          ? "border-primary bg-primary/5"
+                          : "border-gray-200 bg-white hover:border-primary/40"
+                      }`}>
+                      <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-sm font-bold text-gray-600">
+                        {m.icon}
+                      </div>
+                      <span className="text-sm font-medium text-black">{m.name}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+
+          {isLoading && (
+            <div className="flex justify-start">
+              <div className="bg-white border border-gray-100 rounded-2xl rounded-bl-md px-4 py-3 shadow-sm">
+                <div className="flex items-center gap-2 text-gray-400 text-sm">
+                  <span className="flex gap-1">
+                    <span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" />
+                    <span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce [animation-delay:0.15s]" />
+                    <span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce [animation-delay:0.3s]" />
+                  </span>
+                  Хайж байна...
+                </div>
+              </div>
+            </div>
+          )}
+          <div ref={bottomRef} />
+        </div>
+      </div>
+
+      {/* Input */}
+      <div className="shrink-0 px-6 py-4">
+        <div className="max-w-2xl mx-auto">
+          <form onSubmit={handleSubmit} className="relative">
+            <input type="text" value={input} onChange={(e) => setInput(e.target.value)}
+              placeholder="Бараа хайх, сагслах, төлбөр төлөх..."
+              className="w-full bg-white border border-gray-200 rounded-2xl px-5 py-3.5 pr-12 text-sm text-black placeholder:text-gray-400 focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 shadow-sm transition-all"
+              disabled={isLoading} />
+            <button type="submit" disabled={isLoading || !input.trim()}
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-xl bg-primary hover:bg-primary-light disabled:opacity-30 text-white flex items-center justify-center transition-colors">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
