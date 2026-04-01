@@ -84,25 +84,35 @@ export default function FavoritesView({ items, albums, onRemove, onCreateAlbum, 
               <div onClick={() => onProductClick(p)}>
                 <ProductCard product={p} onAddToCart={onAddToCart} />
               </div>
-              <div className="absolute top-2 right-2 flex gap-1 z-10">
-                {/* Assign to album */}
-                <button onClick={() => setAssignProduct(assignProduct === p.id ? null : p.id)}
-                  className="w-6 h-6 rounded-full bg-white/90 border border-gray-200 flex items-center justify-center text-gray-400 hover:text-primary text-[10px]">
-                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 10.5v6m3-3H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" /></svg>
+              {/* 3-dot menu */}
+              <div className="absolute top-2 right-2 z-10">
+                <button onClick={(e) => { e.stopPropagation(); setAssignProduct(assignProduct === p.id ? null : p.id); }}
+                  className="w-7 h-7 rounded-full bg-white/90 border border-gray-200 flex items-center justify-center text-gray-400 hover:text-black shadow-sm">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
                 </button>
-                {/* Remove */}
-                <button onClick={() => onRemove(p.id)}
-                  className="w-6 h-6 rounded-full bg-white/90 border border-gray-200 flex items-center justify-center text-gray-400 hover:text-red-500 text-[10px]">×</button>
+                {assignProduct === p.id && (
+                  <div className="absolute top-9 right-0 bg-white border border-gray-200 rounded-xl shadow-lg z-20 py-1 min-w-[140px]">
+                    {albums.filter((a) => a.id !== "all").length > 0 && (
+                      <>
+                        <p className="px-3 py-1 text-[10px] text-gray-400 font-medium">Album-д нэмэх</p>
+                        {albums.filter((a) => a.id !== "all").map((a) => (
+                          <button key={a.id} onClick={(e) => { e.stopPropagation(); onAddToAlbum(a.id, p.id); setAssignProduct(null); }}
+                            className="w-full text-left px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50 flex items-center gap-2">
+                            <svg className="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 10.5v6m3-3H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" /></svg>
+                            {a.name}
+                          </button>
+                        ))}
+                        <div className="border-t border-gray-100 my-1" />
+                      </>
+                    )}
+                    <button onClick={(e) => { e.stopPropagation(); onRemove(p.id); setAssignProduct(null); }}
+                      className="w-full text-left px-3 py-1.5 text-xs text-red-500 hover:bg-red-50 flex items-center gap-2">
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                      Хасах
+                    </button>
+                  </div>
+                )}
               </div>
-              {/* Album assign dropdown */}
-              {assignProduct === p.id && albums.length > 1 && (
-                <div className="absolute top-10 right-2 bg-white border border-gray-200 rounded-xl shadow-lg z-20 py-1 min-w-[120px]">
-                  {albums.filter((a) => a.id !== "all").map((a) => (
-                    <button key={a.id} onClick={() => { onAddToAlbum(a.id, p.id); setAssignProduct(null); }}
-                      className="w-full text-left px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50">{a.name}</button>
-                  ))}
-                </div>
-              )}
             </div>
           ))}
         </div>
