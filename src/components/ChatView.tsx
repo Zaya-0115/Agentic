@@ -107,18 +107,23 @@ export default function ChatView({ onAddToCart }: Props) {
 
   return (
     <div className="flex-1 flex flex-col bg-[#f5f5f7]">
-      {/* Header */}
-      <header className="shrink-0 border-b border-gray-200 bg-white px-6 py-4">
-        <h2 className="text-lg font-bold text-black">AI Худалдааны Туслах</h2>
-        <p className="text-xs text-gray-400">Бараа хайх, сагслах, төлбөр төлөх</p>
-      </header>
+
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-6 py-4">
         <div className="max-w-2xl mx-auto space-y-4">
           {messages.map((msg) => (
             <div key={msg.id}>
-              <div className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+              <div className={`flex items-end ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                {msg.role === "assistant" && (
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-indigo-500 flex items-center justify-center shrink-0 mr-2">
+                  <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" />
+                    <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                </div>
+              )}
+              <div className="flex flex-col">
                 <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm ${
                   msg.role === "user"
                     ? "bg-primary text-white rounded-br-md"
@@ -126,6 +131,8 @@ export default function ChatView({ onAddToCart }: Props) {
                 }`}>
                   {msg.text}
                 </div>
+                <span className="text-[10px] text-gray-300 mt-1 px-1">{new Date().toLocaleDateString("mn-MN", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
+              </div>
               </div>
 
               {/* Product cards */}

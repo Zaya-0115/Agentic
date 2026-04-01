@@ -131,7 +131,7 @@ export default function ChatInterface() {
             </div>
           </div>
         )}
-        {activePage !== "home" && activePage !== "cart" && (
+        {activePage !== "home" && activePage !== "cart" && activePage !== "chat" && (
           <div className="shrink-0 z-10 flex justify-center pb-5 pt-3">
             <form onSubmit={handleSubmit} className="w-full max-w-xl mx-6">
               <div className="relative">
