@@ -239,11 +239,7 @@ function BrowseView({ searchFor }: {
         <section>
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-base font-bold text-black">{"Онцлох дэлгүүр"}</h3>
-            <div className="relative w-48">
-              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
-              <input type="text" placeholder={"Дэлгүүр хайх..."} onChange={(e) => { if (e.target.value.length > 2) searchFor(e.target.value); }}
-                className="w-full bg-gray-50 border border-gray-200 rounded-full pl-9 pr-3 py-1.5 text-xs text-black placeholder:text-gray-400 focus:outline-none focus:border-primary/40" />
-            </div>
+            <StoreSearch stores={FEAT_STORES} onSelect={(name) => searchFor(name)} />
           </div>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
             {FEAT_STORES.map((s) => (
@@ -660,6 +656,36 @@ function ResultsView({ input, setInput, isLoading, handleSubmit, lastMsg, filter
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function StoreSearch({ stores, onSelect }: { stores: { name: string; desc: string; img: string }[]; onSelect: (name: string) => void }) {
+  const [q, setQ] = useState("");
+  const [open, setOpen] = useState(false);
+  const filtered = q.length > 0 ? stores.filter((s) => s.name.toLowerCase().includes(q.toLowerCase())) : [];
+  return (
+    <div className="relative w-52">
+      <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+      <input type="text" value={q} onChange={(e) => { setQ(e.target.value); setOpen(true); }}
+        onFocus={() => setOpen(true)} onBlur={() => setTimeout(() => setOpen(false), 200)}
+        placeholder={"Дэлгүүр хайх..."}
+        className="w-full bg-gray-50 border border-gray-200 rounded-full pl-9 pr-3 py-1.5 text-xs text-black placeholder:text-gray-400 focus:outline-none focus:border-primary/40" />
+      {open && filtered.length > 0 && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-20">
+          {filtered.map((s) => (
+            <button key={s.name} onMouseDown={() => { onSelect(s.name); setQ(""); setOpen(false); }}
+              className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-gray-50 transition-colors text-left">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={s.img} alt={s.name} className="w-7 h-7 rounded-full object-cover" />
+              <div>
+                <p className="text-xs font-medium text-black">{s.name}</p>
+                <p className="text-[10px] text-gray-400">{s.desc}</p>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
