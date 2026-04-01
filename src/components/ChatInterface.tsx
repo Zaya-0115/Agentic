@@ -221,13 +221,16 @@ function BrowseView({ searchFor }: {
         {/* Circle categories */}
         <section>
           <h3 className="text-base font-bold text-black mb-4">{"Ангилал"}</h3>
-          <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
+          <div className="flex gap-5 overflow-x-auto scrollbar-hide pb-2">
             {CATS.map((c) => (
-              <button key={c.q} onClick={() => searchFor(c.label)} className="flex flex-col items-center gap-2 shrink-0">
-                <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${c.color} flex items-center justify-center shadow-md`}>
-                  <span className="text-white text-lg font-bold">{c.label.charAt(0)}</span>
+              <button key={c.q} onClick={() => searchFor(c.label)} className="flex flex-col items-center gap-2.5 shrink-0 group">
+                <div className={`w-[72px] h-[72px] rounded-full p-[3px] bg-gradient-to-br ${c.color} shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all`}>
+                  <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={`https://picsum.photos/seed/cat-${c.q}/100/100`} alt={c.label} className="w-full h-full rounded-full object-cover" />
+                  </div>
                 </div>
-                <span className="text-[11px] text-gray-600 font-medium">{c.label}</span>
+                <span className="text-xs text-gray-700 font-medium group-hover:text-primary transition-colors">{c.label}</span>
               </button>
             ))}
           </div>
@@ -235,7 +238,14 @@ function BrowseView({ searchFor }: {
 
         {/* Featured stores */}
         <section>
-          <h3 className="text-base font-bold text-black mb-4">{"Онцлох дэлгүүр"}</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base font-bold text-black">{"Онцлох дэлгүүр"}</h3>
+            <div className="relative w-48">
+              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+              <input type="text" placeholder={"Дэлгүүр хайх..."} onChange={(e) => { if (e.target.value.length > 2) searchFor(e.target.value); }}
+                className="w-full bg-gray-50 border border-gray-200 rounded-full pl-9 pr-3 py-1.5 text-xs text-black placeholder:text-gray-400 focus:outline-none focus:border-primary/40" />
+            </div>
+          </div>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
             {FEAT_STORES.map((s) => (
               <button key={s.name} onClick={() => searchFor(s.name)}
