@@ -179,10 +179,14 @@ export default function ChatView({ onAddToCart }: Props) {
     <div className="flex-1 flex bg-[#f5f5f7]">
       {/* History sidebar */}
       <div className={`${showHistory ? "w-64" : "w-0"} shrink-0 bg-white border-r border-gray-100 overflow-hidden transition-all duration-200`}>
-        <div className="p-3 border-b border-gray-100 flex items-center justify-between">
-          <span className="text-sm font-semibold text-black">Түүх</span>
-          <button onClick={newChat} className="text-xs text-primary font-medium hover:underline">+ Шинэ</button>
+        <div className="p-3 space-y-2">
+          <button onClick={newChat}
+            className="w-full flex items-center gap-2 px-3 py-2.5 bg-primary/5 border border-primary/20 rounded-xl text-sm font-medium text-primary hover:bg-primary/10 transition-colors">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            Шинэ чат эхлүүлэх
+          </button>
         </div>
+        <div className="border-t border-gray-100" />
         <div className="overflow-y-auto h-full pb-20">
           {sessions.map((s) => (
             <div key={s.id} onClick={() => { setActiveId(s.id); setPaymentDone(false); }}
@@ -208,8 +212,12 @@ export default function ChatView({ onAddToCart }: Props) {
             className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
           </button>
-          <span className="text-sm font-medium text-black truncate flex-1">{activeSession?.title || "Чат"}</span>
-          <button onClick={newChat} className="text-xs text-primary font-medium hover:underline">+ Шинэ чат</button>
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-indigo-500 flex items-center justify-center shrink-0">
+              <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" /><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
+            </div>
+            <span className="text-sm font-semibold text-black">Selecto AI</span>
+          </div>
         </div>
 
         {/* Messages */}
