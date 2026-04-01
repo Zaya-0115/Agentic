@@ -220,11 +220,10 @@ function BrowseView({ searchFor }: {
 
         {/* Circle categories */}
         <section>
-          <h3 className="text-base font-bold text-black mb-4">{"Ангилал"}</h3>
-          <div className="flex gap-5 overflow-x-auto scrollbar-hide pb-2">
+          <div className="flex gap-5 overflow-x-auto scrollbar-hide justify-between">
             {CATS.map((c) => (
-              <button key={c.q} onClick={() => searchFor(c.label)} className="flex flex-col items-center gap-2.5 shrink-0 group">
-                <div className={`w-[72px] h-[72px] rounded-full p-[3px] bg-gradient-to-br ${c.color} shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all`}>
+              <button key={c.q} onClick={() => searchFor(c.label)} className="flex flex-col items-center gap-2.5 group flex-1 min-w-0">
+                <div className={`w-20 h-20 rounded-full p-[3px] bg-gradient-to-br ${c.color} shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all`}>
                   <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={`https://picsum.photos/seed/cat-${c.q}/100/100`} alt={c.label} className="w-full h-full rounded-full object-cover" />
