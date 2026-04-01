@@ -29,6 +29,13 @@ export default function ProfileView() {
     address: "Улаанбаатар, БЗД, 3-р хороо",
   });
   const [editing, setEditing] = useState(false);
+  const [addresses, setAddresses] = useState([
+    { id: "1", label: "Гэр", address: "Улаанбаатар, БЗД, 3-р хороо" },
+    { id: "2", label: "Оффис", address: "Улаанбаатар, СБД, Сөүлийн гудамж 21" },
+  ]);
+  const [showAddAddr, setShowAddAddr] = useState(false);
+  const [newLabel, setNewLabel] = useState("");
+  const [newAddr, setNewAddr] = useState("");
   const { lang, t, switchLang } = useLanguage();
   const [feedback, setFeedback] = useState("");
   const [feedbackSent, setFeedbackSent] = useState(false);
@@ -141,19 +148,39 @@ export default function ProfileView() {
 
         {/* Address */}
         {activeSection === "address" && (
-          <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-3">
-            <div className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                <svg className="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
+          <div className="space-y-3">
+            {addresses.map((a) => (
+              <div key={a.id} className="bg-white rounded-2xl border border-gray-100 p-4 flex items-start gap-3">
+                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                  <svg className="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-black">{a.label}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{a.address}</p>
+                </div>
+                <button onClick={() => setAddresses(addresses.filter((x) => x.id !== a.id))} className="text-gray-300 hover:text-red-500 mt-1">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
               </div>
-              <div>
-                <p className="text-sm font-medium text-black">Үндсэн хаяг</p>
-                <p className="text-xs text-gray-400 mt-1">{user.address}</p>
+            ))}
+            {!showAddAddr ? (
+              <button onClick={() => setShowAddAddr(true)}
+                className="w-full py-3 border border-dashed border-gray-300 rounded-2xl text-sm text-gray-400 hover:border-primary hover:text-primary transition-colors">
+                + Хаяг нэмэх
+              </button>
+            ) : (
+              <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-3">
+                <input value={newLabel} onChange={(e) => setNewLabel(e.target.value)} placeholder="Гарчиг (жнь: Гэр, Оффис)"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary/40" />
+                <input value={newAddr} onChange={(e) => setNewAddr(e.target.value)} placeholder="Хаяг"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary/40" />
+                <div className="flex gap-2">
+                  <button onClick={() => setShowAddAddr(false)} className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-500">Болих</button>
+                  <button onClick={() => { if (newLabel && newAddr) { setAddresses([...addresses, { id: String(Date.now()), label: newLabel, address: newAddr }]); setNewLabel(""); setNewAddr(""); setShowAddAddr(false); } }}
+                    className="flex-1 py-2.5 bg-primary text-white rounded-xl text-sm font-medium">Нэмэх</button>
+                </div>
               </div>
-            </div>
-            <input value={user.address} onChange={(e) => setUser({ ...user, address: e.target.value })}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary/40" />
-            <button className="w-full py-2.5 bg-primary text-white rounded-xl text-sm font-medium">Хадгалах</button>
+            )}
           </div>
         )}
 
