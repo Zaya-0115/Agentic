@@ -6,6 +6,7 @@ import { Filters, Product, ChatMessage, MerchantSource, Category, SortOption, Ca
 import ProductCard from "./ProductCard";
 import Sidebar from "./Sidebar";
 import ChatView from "./ChatView";
+import ProductDetail from "./ProductDetail";
 import { BRANDS as BRAND_DATA, STORES, getBrandsByCategory, getStoresByPlatform } from "@/lib/merchants/brands";
 import SiteFooter from "./Footer";
 
@@ -59,6 +60,7 @@ export default function ChatInterface() {
   const [input, setInput] = useState("");
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [activePage, setActivePage] = useState("home");
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
@@ -94,12 +96,13 @@ export default function ChatInterface() {
     return r;
   }, [products, filters]);
   const lastMsg = [...messages].reverse().find((m: ChatMessage) => m.role === "assistant");
+  const addToCartWithQty = (p: Product, qty: number) => { for (let i = 0; i < qty; i++) cart.addToCart(p); };
   const updateFilter = (partial: Partial<Filters>) => setFilters((prev) => ({ ...prev, ...partial }));
   const renderPage = () => {
     if (activePage === "listing" && (products.length > 0 || isLoading)) {
       return <ResultsView input={input} setInput={setInput} isLoading={isLoading}
         handleSubmit={handleSubmit} lastMsg={lastMsg} filtered={filtered}
-        filters={filters} updateFilter={updateFilter} onAddToCart={cart.addToCart} allBrands={allBrands} />;
+        filters={filters} updateFilter={updateFilter} onAddToCart={cart.addToCart} allBrands={allBrands} onProductClick={setSelectedProduct} />;
     }
     if (activePage === "listing") {
       return <BrowseView searchFor={searchFor} />;
@@ -132,6 +135,16 @@ export default function ChatInterface() {
           </div>
         )}
       </div>
+      {selectedProduct && (
+        <ProductDetail
+          product={selectedProduct}
+          similarProducts={products.filter((p) => p.id !== selectedProduct.id).slice(0, 8)}
+          onClose={() => setSelectedProduct(null)}
+          onAddToCart={addToCartWithQty}
+          onFavorite={() => {}}
+          onSelectProduct={setSelectedProduct}
+        />
+      )}
       {activePage !== "home" && activePage !== "cart" && activePage !== "chat" && (
         <div className="fixed bottom-0 left-16 right-0 z-30 flex justify-center pb-5 pt-3 pointer-events-none">
           <form onSubmit={handleSubmit} className="w-full max-w-xl mx-6 pointer-events-auto">
@@ -496,11 +509,11 @@ const PLATFORM_LABELS: Record<string, string> = {
   cody: "Cody", zary: "Zary.mn", shoppy: "Shoppy.mn", shoppyhub: "ShoppyHub.mn",
 };
 
-function ResultsView({ input, setInput, isLoading, handleSubmit, lastMsg, filtered, filters, updateFilter, onAddToCart, allBrands }: {
+function ResultsView({ input, setInput, isLoading, handleSubmit, lastMsg, filtered, filters, updateFilter, onAddToCart, allBrands, onProductClick }: {
   input: string; setInput: (v: string) => void; isLoading: boolean;
   handleSubmit: (e: React.FormEvent) => void; lastMsg: ChatMessage | undefined;
   filtered: Product[]; filters: Filters; updateFilter: (p: Partial<Filters>) => void;
-  onAddToCart: (p: Product) => void; allBrands: string[];
+  onAddToCart: (p: Product) => void; allBrands: string[]; onProductClick: (p: Product) => void;
 }) {
   return (
     <div className="flex-1 flex flex-col">
@@ -613,7 +626,7 @@ function ResultsView({ input, setInput, isLoading, handleSubmit, lastMsg, filter
           <div className="mt-4 pb-20">
             {filtered.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                {filtered.map((p: Product) => (<ProductCard key={p.id} product={p} onAddToCart={onAddToCart} onFavorite={() => {}} />))}
+                {filtered.map((p: Product) => (<div key={p.id} onClick={() => onProductClick(p)}><ProductCard product={p} onAddToCart={onAddToCart} onFavorite={() => {}} /></div>))}
               </div>
             ) : (<p className="text-center py-16 text-gray-400 text-sm">{"Таны шүүлтүүрт тохирох бараа олдсонгүй."}</p>)}
             <SiteFooter />
