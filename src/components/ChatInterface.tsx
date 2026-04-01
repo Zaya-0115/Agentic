@@ -118,7 +118,7 @@ export default function ChatInterface() {
     }
     if (activePage === "favorites") return <PlaceholderPage title="Хадгалсан" desc="Танд таалагдсан бараанууд энд хадгалагдана." />;
     if (activePage === "wallet") return <WalletView />;
-    if (activePage === "favorites") return <PlaceholderPage title="Хадгалсан" desc="Танд таалагдсан бараануудыг энд хадгалагдана." />;
+
     if (activePage === "profile") return <ProfileView />;
     return <LandingView input={input} setInput={setInput} isLoading={isLoading} handleSubmit={handleSubmit} />;
   };
