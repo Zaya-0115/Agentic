@@ -9,6 +9,8 @@ import ChatView from "./ChatView";
 import ProductDetail from "./ProductDetail";
 import WalletView from "./WalletView";
 import CheckoutView from "./CheckoutView";
+import FavoritesView from "./FavoritesView";
+import { useFavorites } from "@/hooks/useFavorites";
 import ProfileView from "./ProfileView";
 import { BRANDS as BRAND_DATA, STORES, getBrandsByCategory, getStoresByPlatform } from "@/lib/merchants/brands";
 import SiteFooter from "./Footer";
@@ -60,6 +62,7 @@ const TOP_BRANDS = [
 export default function ChatInterface() {
   const { messages, products, isLoading, sendMessage } = useChat();
   const cart = useCart();
+  const favs = useFavorites();
   const [input, setInput] = useState("");
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [activePage, setActivePage] = useState("home");
@@ -106,10 +109,10 @@ export default function ChatInterface() {
     if (activePage === "results" && (products.length > 0 || isLoading)) {
       return <ResultsView input={input} setInput={setInput} isLoading={isLoading}
         handleSubmit={handleSubmit} lastMsg={lastMsg} filtered={filtered}
-        filters={filters} updateFilter={updateFilter} onAddToCart={cart.addToCart} allBrands={allBrands} onProductClick={setSelectedProduct} />;
+        filters={filters} updateFilter={updateFilter} onAddToCart={cart.addToCart} onFavorite={favs.toggleFavorite} allBrands={allBrands} onProductClick={setSelectedProduct} />;
     }
     if (activePage === "listing") {
-      return <BrowseView searchFor={searchFor} onAddToCart={cart.addToCart} onFavorite={() => {}} onProductClick={setSelectedProduct} />;
+      return <BrowseView searchFor={searchFor} onAddToCart={cart.addToCart} onFavorite={favs.toggleFavorite} onProductClick={setSelectedProduct} />;
     }
     if (activePage === "chat") {
       return <ChatView onAddToCart={cart.addToCart} />;
@@ -118,7 +121,7 @@ export default function ChatInterface() {
       return <CartView items={cart.items} totalPrice={cart.totalPrice}
         onRemove={cart.removeFromCart} onUpdateQty={cart.updateQuantity} onCheckout={() => setShowCheckout(true)} />;
     }
-    if (activePage === "favorites") return <PlaceholderPage title="Хадгалсан" desc="Танд таалагдсан бараанууд энд хадгалагдана." />;
+    if (activePage === "favorites") return <FavoritesView items={favs.items} albums={favs.albums} onRemove={favs.removeFavorite} onCreateAlbum={favs.createAlbum} onDeleteAlbum={favs.deleteAlbum} onAddToAlbum={favs.addToAlbum} onAddToCart={cart.addToCart} onProductClick={setSelectedProduct} />;
     if (activePage === "wallet") return <WalletView />;
 
     if (activePage === "profile") return <ProfileView />;
@@ -150,7 +153,7 @@ export default function ChatInterface() {
           similarProducts={products.filter((p) => p.id !== selectedProduct.id).slice(0, 8)}
           onClose={() => setSelectedProduct(null)}
           onAddToCart={addToCartWithQty}
-          onFavorite={() => {}}
+          onFavorite={favs.toggleFavorite}
           onSelectProduct={setSelectedProduct}
         />
       )}
@@ -558,11 +561,11 @@ const PLATFORM_LABELS: Record<string, string> = {
   cody: "Cody", zary: "Zary.mn", shoppy: "Shoppy.mn", shoppyhub: "ShoppyHub.mn",
 };
 
-function ResultsView({ input, setInput, isLoading, handleSubmit, lastMsg, filtered, filters, updateFilter, onAddToCart, allBrands, onProductClick }: {
+function ResultsView({ input, setInput, isLoading, handleSubmit, lastMsg, filtered, filters, updateFilter, onAddToCart, onFavorite, allBrands, onProductClick }: {
   input: string; setInput: (v: string) => void; isLoading: boolean;
   handleSubmit: (e: React.FormEvent) => void; lastMsg: ChatMessage | undefined;
   filtered: Product[]; filters: Filters; updateFilter: (p: Partial<Filters>) => void;
-  onAddToCart: (p: Product) => void; allBrands: string[]; onProductClick: (p: Product) => void;
+  onAddToCart: (p: Product) => void; onFavorite: (p: Product) => void; allBrands: string[]; onProductClick: (p: Product) => void;
 }) {
   return (
     <div className="flex-1 flex flex-col">
@@ -663,7 +666,7 @@ function ResultsView({ input, setInput, isLoading, handleSubmit, lastMsg, filter
           <div className="mt-4 pb-20">
             {filtered.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                {filtered.map((p: Product) => (<div key={p.id} onClick={() => onProductClick(p)}><ProductCard product={p} onAddToCart={onAddToCart} onFavorite={() => {}} /></div>))}
+                {filtered.map((p: Product) => (<div key={p.id} onClick={() => onProductClick(p)}><ProductCard product={p} onAddToCart={onAddToCart} onFavorite={onFavorite} /></div>))}
               </div>
             ) : (<p className="text-center py-16 text-gray-400 text-sm">{"Таны шүүлтүүрт тохирох бараа олдсонгүй."}</p>)}
             <SiteFooter />
