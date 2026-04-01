@@ -29,6 +29,11 @@ export default function ProfileView() {
     address: "Улаанбаатар, БЗД, 3-р хороо",
   });
   const [editing, setEditing] = useState(false);
+  const [showPwChange, setShowPwChange] = useState(false);
+  const [pwStep, setPwStep] = useState<"form" | "otp" | "done">("form");
+  const [otpCode, setOtpCode] = useState("");
+  const [newPw, setNewPw] = useState("");
+  const [confirmPw, setConfirmPw] = useState("");
   const [addresses, setAddresses] = useState([
     { id: "1", label: "Гэр", address: "Улаанбаатар, БЗД, 3-р хороо" },
     { id: "2", label: "Оффис", address: "Улаанбаатар, СБД, Сөүлийн гудамж 21" },
@@ -143,6 +148,68 @@ export default function ProfileView() {
                 <button onClick={() => setEditing(true)} className="w-full py-2.5 border border-gray-200 rounded-xl text-sm text-gray-600 hover:border-primary hover:text-primary transition-colors">Засах</button>
               </>
             )}
+
+            {/* Password */}
+            <div className="border-t border-gray-100 pt-4 mt-4">
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="text-xs text-gray-400">Нууц үг</p>
+                  <p className="text-sm font-medium text-black">••••••••</p>
+                </div>
+                <button onClick={() => { setShowPwChange(!showPwChange); setPwStep("form"); setOtpCode(""); setNewPw(""); setConfirmPw(""); }}
+                  className="text-xs text-primary font-medium">Солих</button>
+              </div>
+
+              {showPwChange && (
+                <div className="mt-3 space-y-3">
+                  {pwStep === "form" && (
+                    <>
+                      <input type="password" value={newPw} onChange={(e) => setNewPw(e.target.value)}
+                        placeholder="Шинэ нууц үг" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary/40" />
+                      <input type="password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)}
+                        placeholder="Нууц үг давтах" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary/40" />
+                      {newPw && confirmPw && newPw !== confirmPw && (
+                        <p className="text-xs text-red-500">Нууц үг таарахгүй байна</p>
+                      )}
+                      <button onClick={() => { if (newPw && newPw === confirmPw && newPw.length >= 6) setPwStep("otp"); }}
+                        disabled={!newPw || newPw !== confirmPw || newPw.length < 6}
+                        className="w-full py-2.5 bg-primary text-white rounded-xl text-sm font-medium disabled:opacity-40">OTP код илгээх</button>
+                      <p className="text-[10px] text-gray-400 text-center">Хамгийн багадаа 6 тэмдэгт</p>
+                    </>
+                  )}
+                  {pwStep === "otp" && (
+                    <>
+                      <div className="bg-blue-50 rounded-xl p-3 text-center">
+                        <p className="text-xs text-blue-600">{user.phone} дугаар руу OTP код илгээлээ</p>
+                      </div>
+                      <div className="flex gap-2 justify-center">
+                        {[0, 1, 2, 3].map((i) => (
+                          <input key={i} maxLength={1} className="w-12 h-12 border border-gray-200 rounded-xl text-center text-lg font-bold focus:outline-none focus:border-primary"
+                            value={otpCode[i] || ""} onChange={(e) => {
+                              const val = e.target.value.replace(/\D/g, "");
+                              const next = otpCode.split("");
+                              next[i] = val;
+                              setOtpCode(next.join("").slice(0, 4));
+                              if (val && e.target.nextElementSibling) (e.target.nextElementSibling as HTMLInputElement).focus();
+                            }} />
+                        ))}
+                      </div>
+                      <button onClick={() => { if (otpCode.length === 4) setPwStep("done"); }}
+                        disabled={otpCode.length !== 4}
+                        className="w-full py-2.5 bg-primary text-white rounded-xl text-sm font-medium disabled:opacity-40">Баталгаажуулах</button>
+                    </>
+                  )}
+                  {pwStep === "done" && (
+                    <div className="text-center py-3">
+                      <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-2">
+                        <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                      </div>
+                      <p className="text-sm font-medium text-black">Нууц үг амжилттай солигдлоо</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         )}
 
