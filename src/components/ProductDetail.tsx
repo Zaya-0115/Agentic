@@ -11,6 +11,13 @@ const DELIVERY: Record<string, { time: string; policy: string }> = {
   shoppyhub: { time: "7-14 өдөр", policy: "Олон улсын хүргэлт. Буцаалт 30 хоног" },
 };
 
+const STORE_URLS: Record<string, string> = {
+  cody: "https://shoppy.mn",
+  zary: "https://zary.mn",
+  shoppy: "https://shoppy.mn",
+  shoppyhub: "https://shoppyhub.mn",
+};
+
 const VARIANTS = ["S", "M", "L", "XL"];
 
 interface Props {
@@ -139,9 +146,9 @@ export default function ProductDetail({ product, similarProducts, onClose, onAdd
                   <p className="text-sm font-medium text-black">{product.merchantName}</p>
                   <p className="text-[11px] text-gray-400">{product.source === "cody" ? "Cody SaaS мэрчант" : product.source === "shoppyhub" ? "Олон улсын" : "Монгол платформ"}</p>
                 </div>
-                <button onClick={() => { onClose(); onSelectProduct({ ...product, title: product.merchantName }); }}
-                  className="px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-600 hover:border-primary hover:text-primary transition-colors">
-                  {"Дэлгүүр үзэх"}
+                <button onClick={() => window.open(STORE_URLS[product.source] || "#", "_blank")}
+                  className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
                 </button>
               </div>
 
