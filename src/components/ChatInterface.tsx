@@ -424,69 +424,57 @@ function LandingView({ input, setInput, isLoading, handleSubmit }: {
   input: string; setInput: (v: string) => void; isLoading: boolean;
   handleSubmit: (e: React.FormEvent) => void;
 }) {
-  const MERCHANT_NAMES_ROW1 = ["Shoppy.mn", "Zary.mn", "ShoppyHub.mn", "TechStore.mn", "FashionHub.mn", "HomeStyle.mn", "GadgetWorld.mn", "SportZone.mn"];
-  const MERCHANT_NAMES_ROW2 = ["BeautyBox.mn", "KidsPlay.mn", "AutoParts.mn", "Samsung", "Nike", "Apple", "Adidas", "IKEA", "Xiaomi", "H&M"];
+  const NAMES = ["Shoppy.mn", "Zary.mn", "ShoppyHub.mn", "TechStore.mn", "FashionHub.mn", "HomeStyle.mn", "GadgetWorld.mn", "SportZone.mn", "BeautyBox.mn", "KidsPlay.mn", "Samsung", "Nike", "Apple", "Adidas", "IKEA", "Xiaomi"];
 
   return (
-    <div className="flex flex-col relative bg-gradient-to-b from-[#f8f7ff] to-[#f5f5f7]">
-      {/* Blurred orbs */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[20%] left-[15%] w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-[30%] right-[15%] w-72 h-72 bg-violet-200/20 rounded-full blur-3xl" />
-        <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-100/30 rounded-full blur-3xl" />
-      </div>
-
-      {/* Flowing merchant names - top */}
-      <div className="pt-8 overflow-hidden">
-        <div className="flex animate-marquee whitespace-nowrap">
-          {[...MERCHANT_NAMES_ROW1, ...MERCHANT_NAMES_ROW1, ...MERCHANT_NAMES_ROW1].map((name, i) => (
-            <span key={i} className="mx-4 px-5 py-2 rounded-full bg-white/50 border border-gray-200/40 text-sm font-medium text-gray-400 select-none backdrop-blur-sm">{name}</span>
-          ))}
+    <div className="flex flex-col bg-gradient-to-b from-[#f8f7ff] to-[#f5f5f7]">
+      {/* Hero section - full viewport height */}
+      <div className="min-h-screen flex flex-col items-center justify-center relative px-6">
+        {/* Blurred orbs */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-[20%] left-[15%] w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-[30%] right-[15%] w-72 h-72 bg-violet-200/20 rounded-full blur-3xl" />
+          <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-100/30 rounded-full blur-3xl" />
         </div>
-      </div>
 
-      {/* Flowing merchant names - second row (reverse) */}
-      <div className="mt-3 overflow-hidden">
-        <div className="flex animate-marquee-reverse whitespace-nowrap">
-          {[...MERCHANT_NAMES_ROW2, ...MERCHANT_NAMES_ROW2, ...MERCHANT_NAMES_ROW2].map((name, i) => (
-            <span key={i} className="mx-4 px-5 py-2 rounded-full bg-white/50 border border-gray-200/40 text-sm font-medium text-gray-400 select-none backdrop-blur-sm">{name}</span>
-          ))}
-        </div>
-      </div>
-
-      {/* Center content */}
-      <div className="min-h-[60vh] flex flex-col items-center justify-center relative z-10 px-6">
-        <h1 className="text-7xl font-bold text-black tracking-tight mb-3">Sel<span className="text-primary">ec</span>to</h1>
-        <p className="text-gray-400 text-sm mb-8">AI-powered shopping across all platforms</p>
-        <form onSubmit={handleSubmit} className="w-full max-w-xl mb-8">
-          <div className="relative">
-            <input type="text" value={input} onChange={(e) => setInput(e.target.value)}
-              placeholder="Та юу хайж байгаа вэ? Энд бичээрэй"
-              className="w-full bg-white/80 backdrop-blur-md border border-gray-200/80 rounded-full px-6 py-4 pr-14 text-base text-black placeholder:text-gray-400 focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 shadow-xl shadow-gray-200/40 transition-all"
-              disabled={isLoading} />
-            <button type="submit" disabled={isLoading || !input.trim()}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-primary hover:bg-primary-light disabled:opacity-30 text-white flex items-center justify-center transition-colors">
-              <ArrIcon />
-            </button>
+        {/* Rounded content box */}
+        <div className="relative z-10 w-full max-w-2xl bg-white/60 backdrop-blur-xl border border-gray-200/50 rounded-3xl px-8 py-12 shadow-xl shadow-gray-200/30">
+          <div className="flex flex-col items-center">
+            <h1 className="text-6xl font-bold text-black tracking-tight mb-2">Sel<span className="text-primary">ec</span>to</h1>
+            <p className="text-gray-400 text-sm mb-8">AI-powered shopping across all platforms</p>
+            <form onSubmit={handleSubmit} className="w-full max-w-lg mb-6">
+              <div className="relative">
+                <input type="text" value={input} onChange={(e) => setInput(e.target.value)}
+                  placeholder="Та юу хайж байгаа вэ? Энд бичээрэй"
+                  className="w-full bg-white border border-gray-200 rounded-full px-6 py-4 pr-14 text-base text-black placeholder:text-gray-400 focus:outline-none focus:border-primary/40 focus:ring-2 focus:ring-primary/10 shadow-md transition-all"
+                  disabled={isLoading} />
+                <button type="submit" disabled={isLoading || !input.trim()}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-primary hover:bg-primary-light disabled:opacity-30 text-white flex items-center justify-center transition-colors">
+                  <ArrIcon />
+                </button>
+              </div>
+            </form>
+            <div className="w-full">
+              <p className="text-xs font-medium text-black/60 mb-1">Санамж</p>
+              <p className="text-[11px] text-gray-400 leading-relaxed">Хайлтаа илүү нарийвчлан бичвэл илүү сайн үр дүн гарна.</p>
+            </div>
           </div>
-        </form>
-        <div className="w-full max-w-lg bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-2xl px-5 py-4">
-          <p className="text-sm font-medium text-black/80 mb-1">Санамж</p>
-          <p className="text-xs text-gray-500 leading-relaxed">Хайлтаа илүү нарийвчлан бичвэл илүү сайн үр дүн гарна. Барааны нэр, онцлог шинж чанар, үнийн хүрээ зэргийг оруулна уу.</p>
-          <p className="text-xs text-gray-400 mt-2 leading-relaxed italic">{'"50,000-аас доош үнэтэй, усны хамгаалалттай ухаалаг цаг" гэх мэт.'}</p>
+        </div>
+
+        {/* Single flowing row below the box */}
+        <div className="relative z-10 w-full mt-8 overflow-hidden">
+          <div className="flex animate-marquee whitespace-nowrap">
+            {[...NAMES, ...NAMES, ...NAMES].map((name, i) => (
+              <span key={i} className="mx-3 px-4 py-1.5 rounded-full bg-white/50 border border-gray-200/40 text-xs font-medium text-gray-400 select-none">{name}</span>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Flowing merchant names - bottom */}
-      <div className="pb-4 overflow-hidden">
-        <div className="flex animate-marquee whitespace-nowrap">
-          {[...MERCHANT_NAMES_ROW1, ...MERCHANT_NAMES_ROW2, ...MERCHANT_NAMES_ROW1].map((name, i) => (
-            <span key={i} className="mx-4 px-5 py-2 rounded-full bg-white/50 border border-gray-200/40 text-sm font-medium text-gray-400 select-none backdrop-blur-sm">{name}</span>
-          ))}
-        </div>
+      {/* Footer - visible after scrolling */}
+      <div className="relative z-10">
+        <SiteFooter />
       </div>
-
-      <div className="relative z-10"><SiteFooter /></div>
     </div>
   );
 }
