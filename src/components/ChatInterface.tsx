@@ -105,7 +105,7 @@ export default function ChatInterface() {
         filters={filters} updateFilter={updateFilter} onAddToCart={cart.addToCart} allBrands={allBrands} onProductClick={setSelectedProduct} />;
     }
     if (activePage === "listing") {
-      return <BrowseView searchFor={searchFor} />;
+      return <BrowseView searchFor={searchFor} onAddToCart={cart.addToCart} onFavorite={() => {}} onProductClick={setSelectedProduct} />;
     }
     if (activePage === "chat") {
       return <ChatView onAddToCart={cart.addToCart} />;
@@ -166,8 +166,8 @@ export default function ChatInterface() {
 }
 
 /* ==================== BROWSE VIEW ==================== */
-function BrowseView({ searchFor }: {
-  searchFor: (q: string) => void;
+function BrowseView({ searchFor, onAddToCart, onFavorite, onProductClick }: {
+  searchFor: (q: string) => void; onAddToCart: (p: Product) => void; onFavorite: (p: Product) => void; onProductClick: (p: Product) => void;
 }) {
   const [heroIdx, setHeroIdx] = useState(0);
   const HEROES = [
@@ -260,21 +260,22 @@ function BrowseView({ searchFor }: {
         <section>
           <h3 className="text-base font-bold text-black mb-4">{"Топ борлуулалт"}</h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-            {TOP_PRODUCTS.map((p) => (
-              <button key={p.id} onClick={() => searchFor(p.title)}
-                className="bg-white border border-gray-100 rounded-2xl overflow-hidden hover:shadow-md transition-all text-left group">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={p.img} alt={p.title} className="w-full aspect-square object-cover group-hover:scale-105 transition-transform" />
-                <div className="p-3">
-                  <p className="text-xs font-medium text-black truncate">{p.title}</p>
-                  <p className="text-[10px] text-gray-400">{p.store}</p>
-                  <div className="flex items-center justify-between mt-1">
-                    <span className="text-sm font-bold text-black">{p.price.toLocaleString()}₮</span>
-                    <span className="text-[10px] text-yellow-500">{"★"} {p.rating}</span>
-                  </div>
+            {TOP_PRODUCTS.map((p) => {
+              const prod: Product = {
+                id: p.id, title: p.title, description: p.title, price: p.price,
+                currency: "MNT", image: p.img, source: "cody" as const,
+                merchantName: p.store, category: "electronics" as const,
+                rating: p.rating, reviewCount: Math.floor(Math.random() * 500),
+                onSale: Math.random() > 0.6, inStock: true,
+                originalPrice: Math.random() > 0.6 ? Math.floor(p.price * 1.3) : undefined,
+                url: "", brand: undefined,
+              };
+              return (
+                <div key={p.id} onClick={() => onProductClick(prod)}>
+                  <ProductCard product={prod} onAddToCart={onAddToCart} onFavorite={onFavorite} />
                 </div>
-              </button>
-            ))}
+              );
+            })}
           </div>
         </section>
 
