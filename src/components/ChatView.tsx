@@ -53,7 +53,20 @@ export default function ChatView({ onAddToCart }: Props) {
   useEffect(() => {
     const s = loadSessions();
     setSessions(s);
-    if (s.length > 0) setActiveId(s[0].id);
+    if (s.length > 0) {
+      setActiveId(s[0].id);
+    } else {
+      // Auto-create first chat
+      const session: ChatSession = {
+        id: `chat-${Date.now()}`,
+        title: "Шинэ чат",
+        messages: [{ id: "welcome", role: "assistant", text: "Сайн байна уу! Ямар бараа хайж байгаагаа бичээрэй.", timestamp: Date.now() }],
+        createdAt: Date.now(),
+      };
+      setSessions([session]);
+      saveSessions([session]);
+      setActiveId(session.id);
+    }
   }, []);
 
   const activeSession = sessions.find((s) => s.id === activeId);
