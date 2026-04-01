@@ -169,86 +169,116 @@ export default function ChatInterface() {
 function BrowseView({ searchFor }: {
   searchFor: (q: string) => void;
 }) {
+  const [heroIdx, setHeroIdx] = useState(0);
+  const HEROES = [
+    { title: "Зуны хямдрал", desc: "Бүх платформ дээр 60% хүртэлх хямдрал", bg: "from-primary to-indigo-600", img: "https://picsum.photos/seed/hero1/800/300" },
+    { title: "Шинэ технологи", desc: "Samsung, Apple, Xiaomi шинэ бүтээгдэхүүн", bg: "from-blue-600 to-cyan-500", img: "https://picsum.photos/seed/hero2/800/300" },
+    { title: "Хувцас загвар", desc: "Nike, Adidas, Zara шинэ цуглуулга", bg: "from-pink-600 to-rose-500", img: "https://picsum.photos/seed/hero3/800/300" },
+  ];
+  const CATS = [
+    { label: "Электроник", color: "from-blue-400 to-blue-600", q: "electronics" },
+    { label: "Хувцас", color: "from-pink-400 to-pink-600", q: "fashion" },
+    { label: "Гэр ахуй", color: "from-amber-400 to-amber-600", q: "home" },
+    { label: "Гоо сайхан", color: "from-rose-400 to-rose-600", q: "beauty" },
+    { label: "Спорт", color: "from-emerald-400 to-emerald-600", q: "sports" },
+    { label: "Тоглоом", color: "from-purple-400 to-purple-600", q: "toys" },
+    { label: "Ном", color: "from-indigo-400 to-indigo-600", q: "books" },
+    { label: "Авто", color: "from-gray-500 to-gray-700", q: "auto" },
+  ];
+  const FEAT_STORES = [
+    { name: "Shoppy.mn", desc: "170+ брэнд", img: "https://picsum.photos/seed/store-shoppy/80/80" },
+    { name: "Zary.mn", desc: "Зар мэдээ", img: "https://picsum.photos/seed/store-zary/80/80" },
+    { name: "ShoppyHub.mn", desc: "Олон улсын", img: "https://picsum.photos/seed/store-shoppyhub/80/80" },
+    { name: "TechStore.mn", desc: "Электроник", img: "https://picsum.photos/seed/store-techstore/80/80" },
+    { name: "FashionHub.mn", desc: "Хувцас", img: "https://picsum.photos/seed/store-fashionhub/80/80" },
+    { name: "HomeStyle.mn", desc: "Гэр ахуй", img: "https://picsum.photos/seed/store-homestyle/80/80" },
+  ];
+  const TOP_PRODUCTS = Array.from({ length: 10 }, (_, i) => ({
+    id: `top-${i}`, title: ["Ухаалаг цаг","Чихэвч","Куртка","Пүүз","Цүнх","Нарны шил","Цахилгаан","Тоглоом","Ном","Гутал"][i],
+    price: Math.floor(15000 + Math.random() * 200000), img: `https://picsum.photos/seed/top-${i}/300/300`,
+    store: FEAT_STORES[i % FEAT_STORES.length].name, rating: +(3.5 + Math.random() * 1.5).toFixed(1),
+  }));
+
   return (
-    <div className="flex-1 flex flex-col">
-      <div className="flex-1 overflow-y-auto">
-        <div className="max-w-6xl mx-auto px-6 py-6 space-y-10">
-          {/* Featured collections */}
-          <section>
-            <h2 className="text-lg font-bold text-black mb-4">Онцлох цуглуулга</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {BROWSE_COLLECTIONS.map((c, i) => (
-                <button key={i} onClick={() => searchFor(c.title)}
-                  className="relative h-40 rounded-2xl overflow-hidden group text-left">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={c.img} alt={c.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />
-                  <div className="absolute bottom-0 left-0 p-4">
-                    <h3 className="text-white font-semibold text-sm">{c.title}</h3>
-                    <p className="text-white/60 text-xs mt-0.5">{c.desc}</p>
-                  </div>
-                  <div className="absolute bottom-4 right-4 w-7 h-7 rounded-full bg-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <ArrIcon />
-                  </div>
-                </button>
-              ))}
-            </div>
-          </section>
-
-          {/* Browse categories */}
-          <section>
-            <h2 className="text-lg font-bold text-black mb-4">Ангилал үзэх</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-              {BROWSE_CATEGORIES.map((cat) => (
-                <button key={cat.value} onClick={() => searchFor(cat.label)}
-                  className={`${cat.color} rounded-2xl p-4 text-left text-white hover:opacity-90 transition-opacity h-32 flex flex-col justify-between`}>
-                  <span className="text-sm font-semibold">{cat.label}</span>
-                  <div className="flex gap-1 mt-auto">
-                    {cat.items.map((item, j) => (
-                      <span key={j} className="text-[10px] bg-white/20 rounded-full px-2 py-0.5">{item}</span>
-                    ))}
-                  </div>
-                </button>
-              ))}
-            </div>
-          </section>
-
-          {/* Top brands */}
-          <section>
-            <h2 className="text-lg font-bold text-black mb-4">Топ брэндүүд</h2>
-            <div className="flex flex-wrap gap-2">
-              {TOP_BRANDS.map((b) => (
-                <button key={b.name} onClick={() => searchFor(b.name)}
-                  className={`${b.color} px-4 py-2.5 rounded-xl text-sm font-medium hover:shadow-md transition-all`}>
-                  {b.name}
-                </button>
-              ))}
-            </div>
-          </section>
-
-          {/* Trending searches */}
-          <section>
-            <h2 className="text-lg font-bold text-black mb-4">Эрэлттэй хайлтууд</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {["Ухаалаг цаг", "Чихэвч", "Өвлийн куртка", "Гүйлтийн пүүз", "Арьс арчилгаа", "Зөөврийн компьютер", "Гэрийн чимэглэл", "Хүүхдийн тоглоом"].map((q) => (
-                <button key={q} onClick={() => searchFor(q)}
-                  className="bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 hover:border-primary/40 hover:text-primary hover:shadow-sm transition-all text-left">
-                  {q}
-                </button>
-              ))}
-            </div>
-          </section>
-
-          <SiteFooter />
+    <div className="flex flex-col">
+      <div className="max-w-6xl mx-auto px-6 py-6 space-y-8 w-full">
+        {/* Hero banners */}
+        <div className="relative rounded-2xl overflow-hidden h-48">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={HEROES[heroIdx].img} alt="" className="absolute inset-0 w-full h-full object-cover" />
+          <div className={`absolute inset-0 bg-gradient-to-r ${HEROES[heroIdx].bg} opacity-80`} />
+          <div className="absolute inset-0 flex flex-col justify-center px-8">
+            <h2 className="text-2xl font-bold text-white">{HEROES[heroIdx].title}</h2>
+            <p className="text-white/80 text-sm mt-1">{HEROES[heroIdx].desc}</p>
+          </div>
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+            {HEROES.map((_, i) => (
+              <button key={i} onClick={() => setHeroIdx(i)} className={`w-2 h-2 rounded-full transition-all ${heroIdx === i ? "bg-white w-6" : "bg-white/50"}`} />
+            ))}
+          </div>
         </div>
+
+        {/* Circle categories */}
+        <section>
+          <h3 className="text-base font-bold text-black mb-4">{"Ангилал"}</h3>
+          <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
+            {CATS.map((c) => (
+              <button key={c.q} onClick={() => searchFor(c.label)} className="flex flex-col items-center gap-2 shrink-0">
+                <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${c.color} flex items-center justify-center shadow-md`}>
+                  <span className="text-white text-lg font-bold">{c.label.charAt(0)}</span>
+                </div>
+                <span className="text-[11px] text-gray-600 font-medium">{c.label}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* Featured stores */}
+        <section>
+          <h3 className="text-base font-bold text-black mb-4">{"Онцлох дэлгүүр"}</h3>
+          <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
+            {FEAT_STORES.map((s) => (
+              <button key={s.name} onClick={() => searchFor(s.name)}
+                className="shrink-0 flex items-center gap-3 bg-white border border-gray-100 rounded-2xl px-4 py-3 hover:shadow-md hover:border-primary/30 transition-all">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={s.img} alt={s.name} className="w-10 h-10 rounded-full object-cover" />
+                <div className="text-left">
+                  <p className="text-sm font-medium text-black">{s.name}</p>
+                  <p className="text-[10px] text-gray-400">{s.desc}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* Top products - 2 rows */}
+        <section>
+          <h3 className="text-base font-bold text-black mb-4">{"Топ борлуулалт"}</h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            {TOP_PRODUCTS.map((p) => (
+              <button key={p.id} onClick={() => searchFor(p.title)}
+                className="bg-white border border-gray-100 rounded-2xl overflow-hidden hover:shadow-md transition-all text-left group">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={p.img} alt={p.title} className="w-full aspect-square object-cover group-hover:scale-105 transition-transform" />
+                <div className="p-3">
+                  <p className="text-xs font-medium text-black truncate">{p.title}</p>
+                  <p className="text-[10px] text-gray-400">{p.store}</p>
+                  <div className="flex items-center justify-between mt-1">
+                    <span className="text-sm font-bold text-black">{p.price.toLocaleString()}₮</span>
+                    <span className="text-[10px] text-yellow-500">{"★"} {p.rating}</span>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <SiteFooter />
       </div>
-
-
     </div>
   );
 }
 
-/* ==================== OTHER VIEWS ==================== */
 function BrandsView({ searchFor }: { searchFor: (q: string) => void }) {
   const [following, setFollowing] = useState<Set<string>>(new Set());
   const toggle = (id: string) => {
