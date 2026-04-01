@@ -148,8 +148,10 @@ export default function ChatView({ onAddToCart }: Props) {
                         <div className="flex items-center justify-between mt-1.5">
                           <span className="text-sm font-bold text-black">{fmt(p.price)}</span>
                           <button onClick={() => handleAddToCart(p)}
-                            className="px-2.5 py-1 bg-primary text-white text-[10px] font-medium rounded-lg hover:bg-primary-light transition-colors">
-                            Сагслах
+                            className="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary-light transition-colors">
+                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
                           </button>
                         </div>
                       </div>
