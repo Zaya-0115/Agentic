@@ -67,12 +67,12 @@ export default function ChatInterface() {
     sendMessage(input.trim());
     setInput("");
     setFilters(DEFAULT_FILTERS);
-    setActivePage("listing");
+    setActivePage("results");
   };
   const searchFor = (q: string) => {
     sendMessage(q);
     setFilters(DEFAULT_FILTERS);
-    setActivePage("listing");
+    setActivePage("results");
   };
   const allBrands = useMemo(() => {
     const set = new Set<string>();
@@ -99,7 +99,7 @@ export default function ChatInterface() {
   const addToCartWithQty = (p: Product, qty: number) => { for (let i = 0; i < qty; i++) cart.addToCart(p); };
   const updateFilter = (partial: Partial<Filters>) => setFilters((prev) => ({ ...prev, ...partial }));
   const renderPage = () => {
-    if (activePage === "listing" && (products.length > 0 || isLoading)) {
+    if (activePage === "results" && (products.length > 0 || isLoading)) {
       return <ResultsView input={input} setInput={setInput} isLoading={isLoading}
         handleSubmit={handleSubmit} lastMsg={lastMsg} filtered={filtered}
         filters={filters} updateFilter={updateFilter} onAddToCart={cart.addToCart} allBrands={allBrands} onProductClick={setSelectedProduct} />;
@@ -145,7 +145,7 @@ export default function ChatInterface() {
           onSelectProduct={setSelectedProduct}
         />
       )}
-      {activePage !== "home" && activePage !== "cart" && activePage !== "chat" && (
+      {activePage !== "home" && activePage !== "cart" && activePage !== "chat" && activePage !== "results" && (
         <div className="fixed bottom-0 left-16 right-0 z-30 flex justify-center pb-5 pt-3 pointer-events-none">
           <form onSubmit={handleSubmit} className="w-full max-w-xl mx-6 pointer-events-auto">
             <div className="relative">
